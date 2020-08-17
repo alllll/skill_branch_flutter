@@ -1,4 +1,5 @@
 import 'package:FlutterGalleryApp/res/res.dart';
+import 'package:FlutterGalleryApp/screens/photo_screen.dart';
 import 'package:FlutterGalleryApp/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 
@@ -34,8 +35,18 @@ class _FeedState extends State<Feed> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        Photo(
-          photoLink: kFlutterDash,
+        GestureDetector(
+          onTap: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => FullScreenImage(
+                          photo: kFlutterDash,
+                        )));
+          },
+          child: Photo(
+            photoLink: kFlutterDash,
+          ),
         ),
         _buildPhotoMeta(),
         Padding(

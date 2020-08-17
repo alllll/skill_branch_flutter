@@ -34,13 +34,14 @@ class _FullScreenImageState extends State<FullScreenImage> {
   }
 
   @override
-  Widget build(Object context) {
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        elevation: 0,
         backgroundColor: AppColors.white,
         leading: IconButton(
             icon: Icon(CupertinoIcons.back, color: AppColors.grayChateau),
-            onPressed: null),
+            onPressed: () => Navigator.pop(context, false)),
         title: Text("Photo", style: AppStyles.h1Black),
       ),
       body: Column(
@@ -64,6 +65,9 @@ class _FullScreenImageState extends State<FullScreenImage> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 LikeButton(10, true),
+                SizedBox(
+                  width: 10,
+                ),
                 GestureDetector(
                   onTap: () {},
                   child: Container(
