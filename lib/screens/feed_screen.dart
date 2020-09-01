@@ -45,6 +45,8 @@ class _FeedState extends State<Feed> {
                           heroTag: heroTag,
                           userName: "kaparray",
                           name: "Kirill Adeshchenko",
+                          userPhoto:
+                              'https://skill-branch.ru/img/speakers/Adechenko.jpg',
                           altDescription:
                               "'This is Flutter Dash. I love him :)'",
                         )));

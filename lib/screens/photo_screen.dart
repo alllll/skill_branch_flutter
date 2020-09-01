@@ -10,13 +10,15 @@ class FullScreenImage extends StatefulWidget {
       this.photo,
       this.userName,
       Key key,
-      this.heroTag})
+      this.heroTag,
+      this.userPhoto})
       : super(key: key);
   final String altDescription;
   final String userName;
   final String photo;
   final String name;
   final String heroTag;
+  final String userPhoto;
 
   @override
   State<StatefulWidget> createState() {
@@ -31,6 +33,7 @@ class _FullScreenImageState extends State<FullScreenImage>
   String userName;
   String name;
   String heroTag;
+  String userPhoto;
   AnimationController _controller;
 
   @override
@@ -42,6 +45,9 @@ class _FullScreenImageState extends State<FullScreenImage>
     userName = widget.userName != null ? widget.userName : "";
     name = widget.name != null ? widget.name : "";
     heroTag = widget.heroTag != null ? widget.heroTag : "";
+    userPhoto = widget.userPhoto != null
+        ? widget.userPhoto
+        : "https://skill-branch.ru/img/speakers/Adechenko.jpg";
     _controller = AnimationController(
         vsync: this, duration: const Duration(milliseconds: 1500));
     _controller.forward();
@@ -86,6 +92,7 @@ class _FullScreenImageState extends State<FullScreenImage>
             controller: _controller.view,
             userName: userName,
             name: name,
+            userPhoto: userPhoto,
           ),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
@@ -159,7 +166,8 @@ class _FullScreenImageState extends State<FullScreenImage>
 }
 
 class AnimationPhotoMeta extends StatelessWidget {
-  AnimationPhotoMeta({Key key, this.controller, this.userName, this.name})
+  AnimationPhotoMeta(
+      {Key key, this.controller, this.userName, this.name, this.userPhoto})
       : opacityUserAvatar = Tween<double>(begin: 0.0, end: 1.0).animate(
             CurvedAnimation(
                 curve: Interval(0.0, 0.5, curve: Curves.ease),
@@ -175,6 +183,7 @@ class AnimationPhotoMeta extends StatelessWidget {
   final Animation<double> opacityColumn;
   final String userName;
   final String name;
+  final String userPhoto;
 
   Widget _buildAnimation(BuildContext context, Widget child) {
     return Padding(
@@ -186,8 +195,7 @@ class AnimationPhotoMeta extends StatelessWidget {
               children: <Widget>[
                 Opacity(
                   opacity: opacityUserAvatar.value,
-                  child: UserAvatar(
-                      'https://skill-branch.ru/img/speakers/Adechenko.jpg'),
+                  child: UserAvatar(userPhoto),
                 ),
                 SizedBox(width: 6),
                 Opacity(
