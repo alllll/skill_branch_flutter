@@ -22,7 +22,7 @@ class _FeedState extends State<Feed> {
             itemCount: 10,
             itemBuilder: (BuildContext context, int index) {
               return Column(children: <Widget>[
-                _buildItem(),
+                _buildItem(index.toString()),
                 Divider(
                   thickness: 2,
                   color: AppColors.mercury,
@@ -31,7 +31,7 @@ class _FeedState extends State<Feed> {
             }));
   }
 
-  Widget _buildItem() {
+  Widget _buildItem(String heroTag) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
@@ -42,11 +42,23 @@ class _FeedState extends State<Feed> {
                 MaterialPageRoute(
                     builder: (context) => FullScreenImage(
                           photo: kFlutterDash,
+                          heroTag: heroTag,
+                          userName: "kaparray",
+                          name: "Kirill Adeshchenko",
+                          altDescription:
+                              "'This is Flutter Dash. I love him :)'",
                         )));
           },
+          child: Hero(
+            tag: heroTag,
+            child: Photo(
+              photoLink: kFlutterDash,
+            ),
+          ),
+          /*
           child: Photo(
             photoLink: kFlutterDash,
-          ),
+          ),*/
         ),
         _buildPhotoMeta(),
         Padding(
