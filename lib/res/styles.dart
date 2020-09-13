@@ -86,10 +86,10 @@ TextTheme buildAppTextTheme() {
         fontSize: 14,
         height: 20 / 14,
         color: AppColors.manatee,
-        fontWeight: FontWeight.w600,
+        fontWeight: FontWeight.normal,
         fontFamily: 'Roboto',
         fontStyle: FontStyle.normal,
-        letterSpacing: 0.75,
+        letterSpacing: 0.25,
       ),
       headline4: TextStyle(
         fontSize: 14,
