@@ -37,19 +37,17 @@ class _FeedState extends State<Feed> {
       children: <Widget>[
         GestureDetector(
           onTap: () {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => FullScreenImage(
-                          photo: kFlutterDash,
-                          heroTag: heroTag,
-                          userName: "kaparray",
-                          name: "Kirill Adeshchenko",
-                          userPhoto:
-                              'https://skill-branch.ru/img/speakers/Adechenko.jpg',
-                          altDescription:
-                              "'This is Flutter Dash. I love him :)'",
-                        )));
+            Navigator.pushNamed(context, '/fullScreenImage',
+                arguments: FullScreenImageArguments(
+                  routeSettings: RouteSettings(arguments: "Some title"),
+                  photo: kFlutterDash,
+                  heroTag: heroTag,
+                  userName: "kaparray",
+                  name: "Kirill Adeshchenko",
+                  userPhoto:
+                      'https://skill-branch.ru/img/speakers/Adechenko.jpg',
+                  altDescription: "'This is Flutter Dash. I love him :)'",
+                ));
           },
           child: Hero(
             tag: heroTag,
@@ -69,7 +67,10 @@ class _FeedState extends State<Feed> {
             'This is Flutter Dash. I love him :)',
             maxLines: 3,
             overflow: TextOverflow.ellipsis,
-            style: AppStyles.h3.copyWith(color: AppColors.black),
+            style: Theme.of(context)
+                .textTheme
+                .headline3
+                .copyWith(color: AppColors.black),
           ),
         )
       ],
@@ -91,9 +92,12 @@ class _FeedState extends State<Feed> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    Text('Kirill Adeshchenko', style: AppStyles.h2Black),
+                    Text('Kirill Adeshchenko',
+                        style: Theme.of(context).textTheme.headline2),
                     Text('@kaparray',
-                        style: AppStyles.h2Black
+                        style: Theme.of(context)
+                            .textTheme
+                            .headline2
                             .copyWith(color: AppColors.manatee))
                   ],
                 )

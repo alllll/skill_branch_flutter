@@ -1,7 +1,30 @@
 import 'package:FlutterGalleryApp/res/res.dart';
+import 'package:FlutterGalleryApp/widgets/claim_bottom_sheet.dart';
 import 'package:FlutterGalleryApp/widgets/widgets.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:gallery_saver/gallery_saver.dart';
+
+class FullScreenImageArguments {
+  FullScreenImageArguments(
+      {this.altDescription,
+      this.userName,
+      this.photo,
+      this.name,
+      this.heroTag,
+      this.userPhoto,
+      this.key,
+      this.routeSettings});
+
+  final String altDescription;
+  final String userName;
+  final String photo;
+  final String name;
+  final String heroTag;
+  final String userPhoto;
+  final Key key;
+  final RouteSettings routeSettings;
+}
 
 class FullScreenImage extends StatefulWidget {
   FullScreenImage(
@@ -62,14 +85,7 @@ class _FullScreenImageState extends State<FullScreenImage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        backgroundColor: AppColors.white,
-        leading: IconButton(
-            icon: Icon(CupertinoIcons.back, color: AppColors.grayChateau),
-            onPressed: () => Navigator.pop(context, false)),
-        title: Text("Photo", style: AppStyles.h1Black),
-      ),
+      appBar: _buildAppBar(),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
@@ -84,7 +100,7 @@ class _FullScreenImageState extends State<FullScreenImage>
               child: Text(
                 altDescription,
                 maxLines: 3,
-                style: AppStyles.h3,
+                style: Theme.of(context).textTheme.headline3,
                 overflow: TextOverflow.ellipsis,
               )),
           // _buildPhotoMeta(),
@@ -103,37 +119,102 @@ class _FullScreenImageState extends State<FullScreenImage>
                 SizedBox(
                   width: 10,
                 ),
-                GestureDetector(
-                  onTap: () {},
-                  child: Container(
-                      width: 120,
-                      height: 40,
-                      decoration: BoxDecoration(
-                          color: AppColors.dodgerBlue,
-                          borderRadius: BorderRadius.circular(10)),
-                      child: Center(
-                          child: Text("Save",
-                              style: AppStyles.h1Black
-                                  .copyWith(color: AppColors.white)))),
-                ),
-                GestureDetector(
-                  onTap: () {},
-                  child: Container(
-                      width: 120,
-                      height: 40,
-                      decoration: BoxDecoration(
-                          color: AppColors.dodgerBlue,
-                          borderRadius: BorderRadius.circular(10)),
-                      child: Center(
-                          child: Text("Visit",
-                              style: AppStyles.h1Black
-                                  .copyWith(color: AppColors.white)))),
-                ),
+                _buildButton("Save", () {
+                  showDialog(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                            title: Text("Downloading photos"),
+                            content: Text(
+                                "Are you sure you want to upload a photo?"),
+                            actions: [
+                              FlatButton(
+                                  onPressed: () {
+                                    GallerySaver.saveImage(photo).then(
+                                        (value) => Navigator.of(context).pop());
+                                  },
+                                  child: Text("Download")),
+                              FlatButton(
+                                  onPressed: () => Navigator.of(context).pop(),
+                                  child: Text("Close"))
+                            ],
+                          ));
+                }),
+                _buildButton("Visit", () async {
+                  OverlayState overlayState = Overlay.of(context);
+                  OverlayEntry overlayEntry = OverlayEntry(builder: (context) {
+                    return Positioned(
+                        top: MediaQuery.of(context).viewInsets.top + 50,
+                        child: Material(
+                          color: Colors.transparent,
+                          child: Container(
+                            alignment: Alignment.center,
+                            width: MediaQuery.of(context).size.width,
+                            child: Container(
+                              margin: EdgeInsets.symmetric(horizontal: 20),
+                              padding: EdgeInsets.fromLTRB(16, 10, 16, 10),
+                              decoration: BoxDecoration(
+                                  color: AppColors.mercury,
+                                  borderRadius: BorderRadius.circular(12)),
+                              child: Text("SkillBranch"),
+                            ),
+                          ),
+                        ));
+                  });
+                  overlayState.insert(overlayEntry);
+                  await Future.delayed(Duration(seconds: 1));
+                  overlayEntry.remove();
+                })
               ],
             ),
           )
         ],
       ),
+    );
+  }
+
+  Widget _buildButton(String text, VoidCallback callback) {
+    return GestureDetector(
+      onTap: callback,
+      child: Container(
+          alignment: Alignment.center,
+          width: 120,
+          height: 36,
+          decoration: BoxDecoration(
+            color: AppColors.dodgerBlue,
+            borderRadius: BorderRadius.circular(7),
+          ),
+          child: Text(text,
+              style: Theme.of(context).textTheme.headline1.copyWith(
+                  color: AppColors.white, fontWeight: FontWeight.bold))),
+    );
+  }
+
+  AppBar _buildAppBar() {
+    return AppBar(
+      elevation: 0,
+      backgroundColor: AppColors.white,
+      actions: [
+        IconButton(
+            icon: Icon(Icons.more_vert, color: AppColors.grayChateau),
+            onPressed: () {
+              showModalBottomSheet(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  context: context,
+                  builder: (context) {
+                    return ClaimBottomSheet();
+                  });
+            }),
+      ],
+      leading: IconButton(
+          icon: Icon(CupertinoIcons.back, color: AppColors.grayChateau),
+          onPressed: () => Navigator.pop(context, false)),
+      title: Text("Photo",
+          style: Theme.of(context)
+              .textTheme
+              .headline1
+              .copyWith(fontWeight: FontWeight.bold)),
     );
   }
 
@@ -152,10 +233,15 @@ class _FullScreenImageState extends State<FullScreenImage>
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    Text(name, style: AppStyles.h1Black),
+                    Text(name,
+                        style: Theme.of(context)
+                            .textTheme
+                            .headline1
+                            .copyWith(fontWeight: FontWeight.bold)),
                     Text("@" + userName,
-                        style: AppStyles.h5Black
-                            .copyWith(color: AppColors.manatee))
+                        style: Theme.of(context).textTheme.headline5.copyWith(
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.manatee))
                   ],
                 )
               ],
@@ -204,10 +290,15 @@ class AnimationPhotoMeta extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
-                      Text(name, style: AppStyles.h1Black),
+                      Text(name,
+                          style: Theme.of(context)
+                              .textTheme
+                              .headline1
+                              .copyWith(fontWeight: FontWeight.bold)),
                       Text("@" + userName,
-                          style: AppStyles.h5Black
-                              .copyWith(color: AppColors.manatee))
+                          style: Theme.of(context).textTheme.headline1.copyWith(
+                              fontWeight: FontWeight.bold,
+                              color: AppColors.manatee))
                     ],
                   ),
                 )
