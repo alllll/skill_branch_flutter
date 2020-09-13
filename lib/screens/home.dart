@@ -1,5 +1,4 @@
 import 'package:FlutterGalleryApp/res/res.dart';
-import 'package:FlutterGalleryApp/screens/demo_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/semantics.dart';
 
@@ -24,18 +23,9 @@ class _HomeState extends State<Home> {
           currentTab: currentTab,
           curve: Curves.ease,
           onItemSelected: (int index) async {
-            if (index == 1) {
-              var value = await Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => DemoScreen(),
-                  ));
-              print(value);
-            } else {
-              setState(() {
-                currentTab = index;
-              });
-            }
+            setState(() {
+              currentTab = index;
+            });
           },
           items: [
             BottomNavyBarItem(
