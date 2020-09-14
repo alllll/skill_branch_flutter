@@ -14,7 +14,6 @@ class ConnectivityOverlay {
   factory ConnectivityOverlay() {
     return _singleton;
   }
-
   ConnectivityOverlay._internal();
 
   static OverlayEntry overlayEntry;
