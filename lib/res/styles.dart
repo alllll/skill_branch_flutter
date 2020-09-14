@@ -69,7 +69,7 @@ TextTheme buildAppTextTheme() {
         fontSize: 18,
         height: 23 / 18,
         color: AppColors.black,
-        fontWeight: FontWeight.normal,
+        fontWeight: FontWeight.bold,
         fontFamily: 'Roboto',
         fontStyle: FontStyle.normal,
       ),
