@@ -71,8 +71,8 @@ class _FullScreenImageState extends State<FullScreenImage>
     userPhoto = widget.userPhoto != null
         ? widget.userPhoto
         : "https://skill-branch.ru/img/speakers/Adechenko.jpg";
-    _controller = AnimationController(
-        vsync: this, duration: const Duration(milliseconds: 1500));
+    _controller =
+        AnimationController(duration: const Duration(milliseconds: 1500));
     _controller.forward();
   }
 
