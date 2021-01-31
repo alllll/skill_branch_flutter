@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'app.dart';
 
 void main() {
-  runApp(MyApp(Connectivity().onConnectivityChanged));
+  runApp(MyApp());
 }
 
 class ConnectivityOverlay {

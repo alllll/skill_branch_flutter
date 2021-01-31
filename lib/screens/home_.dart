@@ -1,98 +1,87 @@
-import 'package:FlutterGalleryApp/bloc/author/author_bloc.dart';
-import 'package:FlutterGalleryApp/bloc/collection/collection_bloc.dart';
-import 'package:FlutterGalleryApp/bloc/navigation/navigation_bloc.dart';
-import 'package:FlutterGalleryApp/bloc/navigation/navigation_event.dart';
-import 'package:FlutterGalleryApp/bloc/navigation/navigation_state.dart';
-import 'package:FlutterGalleryApp/bloc/photo/photo_bloc.dart';
-import 'package:FlutterGalleryApp/res/res.dart';
-import 'package:FlutterGalleryApp/screens/author_screen.dart';
-import 'package:FlutterGalleryApp/screens/photo_screen.dart';
-import 'package:FlutterGalleryApp/screens/profile_screen.dart';
-import 'package:FlutterGalleryApp/screens/search_screen.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_icons/flutter_icons.dart';
+/*import 'dart:async';
 
-import 'collection_screen.dart';
+import 'package:FlutterGalleryApp/main.dart';
+import 'package:FlutterGalleryApp/res/res.dart';
+import 'package:connectivity/connectivity.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/semantics.dart';
+
 import 'feed_screen.dart';
 
-/*
 class Home extends StatefulWidget {
+  final Stream<ConnectivityResult> onConnectivityChanged;
+
+  const Home(this.onConnectivityChanged, {Key key}) : super(key: key);
+
   @override
   State<StatefulWidget> createState() {
     return _HomeState();
   }
 }
-*/
-class Home extends StatelessWidget {
-  List<Widget> pages = [
-    Feed(key: new PageStorageKey("feed")),
-    SearchScreen(key: new PageStorageKey("feed")),
-    Profile(key: new PageStorageKey("profile"))
-  ];
+
+class _HomeState extends State<Home> {
+  int currentTab = 0;
+  List<Widget> pages = [Feed(), Container(), Container()];
+  StreamSubscription subscription;
+  var connectivityOverlay = ConnectivityOverlay();
+
+  @override
+  void initState() {
+    super.initState();
+    subscription =
+        widget.onConnectivityChanged.listen((ConnectivityResult result) {
+      switch (result) {
+        case ConnectivityResult.wifi:
+          connectivityOverlay.removeOverlay(context);
+          break;
+        case ConnectivityResult.mobile:
+          connectivityOverlay.removeOverlay(context);
+          break;
+        case ConnectivityResult.none:
+          connectivityOverlay.showOverlay(
+              context, Text("No internet connection"));
+          break;
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    subscription.cancel();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<NavigationBloc, NavigationState>(
-        builder: (context, state) {
-      return Scaffold(
+    return Scaffold(
         bottomNavigationBar: BottomNavyBar(
-          showElevation: false,
-          containerHeight: 65,
           itemCornerRadius: 8,
-          currentTab: (state as NavigationTabState).tabItemIndex,
+          currentTab: currentTab,
           curve: Curves.ease,
           onItemSelected: (int index) async {
-            BlocProvider.of<NavigationBloc>(context)
-                .add(NavigationTabEvent(index));
+            setState(() {
+              currentTab = index;
+            });
           },
           items: [
             BottomNavyBarItem(
                 asset: AppIcons.home,
-                title: Text('Home'),
+                title: Text('Feed'),
                 activeColor: AppColors.dodgerBlue,
                 inactiveColor: AppColors.manatee),
             BottomNavyBarItem(
-                asset: AppIcons.search,
+                asset: AppIcons.home,
                 title: Text('Search'),
                 activeColor: AppColors.dodgerBlue,
                 inactiveColor: AppColors.manatee),
             BottomNavyBarItem(
-                asset: AppIcons.user,
-                title: Text('Profile'),
+                asset: AppIcons.home,
+                title: Text('User'),
                 activeColor: AppColors.dodgerBlue,
                 inactiveColor: AppColors.manatee),
           ],
         ),
-        body: MultiBlocListener(listeners: [
-          BlocListener<PhotoBloc, PhotoState>(listener: (context, state) async {
-            if (state is PhotoLoaded) {
-              final result =
-                  await Navigator.push(context, MaterialPageRoute(builder: (_) {
-                return FullScreenImage();
-              }));
-            }
-          }),
-          BlocListener<CollectionBloc, CollectionState>(
-              listener: (context, state) {
-            if (state is CollectionLoaded)
-              Navigator.push(context, MaterialPageRoute(builder: (_) {
-                return CollectionScreen();
-              }));
-          }),
-          BlocListener<AuthorBloc, AuthorState>(
-            listener: (context, state) {
-              if (state is AuthorLoaded) {
-                Navigator.push(context, MaterialPageRoute(builder: (_) {
-                  return AuthorScreen();
-                }));
-              }
-            },
-            child: Container(),
-          )
-        ], child: pages[(state as NavigationTabState).tabItemIndex]),
-      );
-    });
+        body: pages[currentTab]);
   }
 }
 
@@ -101,7 +90,7 @@ class BottomNavyBar extends StatelessWidget {
       {Key key,
       this.backgrounColor = Colors.white,
       this.showElevation = true,
-      this.containerHeight = 70,
+      this.containerHeight = 56,
       this.mainAxisAlignment = MainAxisAlignment.spaceBetween,
       this.items,
       this.onItemSelected,
@@ -181,17 +170,15 @@ class _ItemWidget extends StatelessWidget {
     return AnimatedContainer(
       duration: animationDuration,
       padding: const EdgeInsets.symmetric(horizontal: 8),
-      /* width: isSelected
+      width: isSelected
           ? 150
-          : (MediaQuery.of(context).size.width - 150 - 8 * 4 - 4 * 2) / 2,*/
-      width: (MediaQuery.of(context).size.width - 150 - 8 * 4 - 4 * 2) / 2,
+          : (MediaQuery.of(context).size.width - 150 - 8 * 4 - 4 * 2) / 2,
       curve: curve,
       decoration: BoxDecoration(
-          /* color:
-              isSelected ? item.activeColor.withOpacity(0.2) : backgroundColor,*/
-          color: backgroundColor,
+          color:
+              isSelected ? item.activeColor.withOpacity(0.2) : backgroundColor,
           borderRadius: BorderRadius.circular(itemCornerRadius)),
-      child: Column(
+      child: Row(
         children: [
           Icon(item.asset,
               size: 20,
@@ -232,3 +219,4 @@ class BottomNavyBarItem {
   final Color inactiveColor;
   final TextAlign textAlign;
 }
+*/

@@ -3,8 +3,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class Photo extends StatelessWidget {
-  Photo({Key key, this.photoLink}) : super(key: key);
+class PhotoW extends StatelessWidget {
+  PhotoW({Key key, this.photoLink}) : super(key: key);
 
   final String photoLink;
   @override
@@ -17,8 +17,8 @@ class Photo extends StatelessWidget {
           color: AppColors.grayChateau,
           child: CachedNetworkImage(
             imageUrl: photoLink,
-            placeholder: (context, url) =>
-                Center(child: CircularProgressIndicator()),
+            /*   placeholder: (context, url) =>
+                Center(child: CircularProgressIndicator()),*/
             errorWidget: (context, url, error) => Icon(Icons.error),
             fit: BoxFit.fill,
           ),
