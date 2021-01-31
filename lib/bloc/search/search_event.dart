@@ -16,17 +16,15 @@ class SearchPhotoEvent extends SearchEvent {
 }
 
 class SearchPhotoAddEvent extends SearchEvent {
-  String searchString;
-  SearchPhotoAddEvent(this.searchString) : super();
+  SearchPhotoAddEvent() : super();
 
   @override
-  List<Object> get props => [searchString];
+  List<Object> get props => [];
 }
 
 class SearchPhotoReloadEvent extends SearchEvent {
-  String searchString;
-  SearchPhotoReloadEvent(this.searchString) : super();
+  SearchPhotoReloadEvent() : super();
 
   @override
-  List<Object> get props => [searchString];
+  List<Object> get props => [];
 }

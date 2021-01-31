@@ -12,6 +12,7 @@ import 'package:FlutterGalleryApp/bloc/photo/photo_list_bloc.dart';
 import 'package:FlutterGalleryApp/bloc/profile/my_photo_bloc.dart';
 import 'package:FlutterGalleryApp/bloc/profile/profile_collection_bloc.dart';
 import 'package:FlutterGalleryApp/bloc/profile/profile_like_bloc.dart';
+import 'package:FlutterGalleryApp/bloc/search/search_bloc.dart';
 import 'package:FlutterGalleryApp/res/res.dart';
 import 'package:FlutterGalleryApp/screens/feed_screen.dart';
 import 'package:FlutterGalleryApp/screens/home.dart';
@@ -40,6 +41,7 @@ class MyApp extends StatelessWidget {
   AuthorLikeBloc _authorLikeBloc;
   AuthorPhotoBloc _authorPhotoBloc;
   AuthorCollectionBloc _authorCollectionBloc;
+  SearchBloc _searchBloc;
 
   AppBloc _appBloc;
   MyApp() {
@@ -57,7 +59,7 @@ class MyApp extends StatelessWidget {
     _authorPhotoBloc = new AuthorPhotoBloc();
     _authorBloc = new AuthorBloc(
         _authorPhotoBloc, _authorLikeBloc, _authorCollectionBloc);
-
+    _searchBloc = SearchBloc();
     _appBloc = new AppBloc(
         _collectionBloc,
         _navigationBloc,
@@ -87,6 +89,7 @@ class MyApp extends StatelessWidget {
           BlocProvider<AuthorCollectionBloc>(
               create: (context) => _authorCollectionBloc),
           BlocProvider<AuthorLikeBloc>(create: (context) => _authorLikeBloc),
+          BlocProvider<SearchBloc>(create: (context) => _searchBloc),
           BlocProvider<AppBloc>(create: (context) => _appBloc)
         ],
         child: MaterialApp(

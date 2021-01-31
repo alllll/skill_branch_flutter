@@ -176,4 +176,18 @@ class PhotoApiProvider {
     } else
       Exception("failed search photos");
   }
+
+  Future<SearchResult> searchPhotoRelated(String id) async {
+    await initDio();
+    dio.options.baseUrl = "https://unsplash.com";
+    final Response<String> response =
+        await dio.get("/napi/photos/$id/related", queryParameters: {
+      "client_id": clientId,
+    });
+    print(response.headers["X-Ratelimit-Remaining"]);
+    if (response.statusCode == succesCode) {
+      return searchResultFromJson(response.data);
+    } else
+      Exception("failed search photos");
+  }
 }

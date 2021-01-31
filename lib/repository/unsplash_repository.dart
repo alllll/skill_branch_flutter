@@ -36,4 +36,7 @@ class UnsplashRepository {
 
   Future<SearchResult> searchPhoto(String text, int page, int perPage) =>
       _photoApiProvider.searchPhoto(text, page, perPage);
+
+  Future<SearchResult> searchPhotoRelated(String id) =>
+      _photoApiProvider.searchPhotoRelated(id);
 }

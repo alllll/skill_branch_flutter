@@ -42,5 +42,14 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
         yield SearchShowResultState(photo);
       }
     }
+    if (event is SearchPhotoReloadEvent) {
+      page = 1;
+      yield SearchLoadingState();
+      SearchResult result =
+          await unsplashRepository.searchPhoto(currentSearch, page, perPage);
+      totalPages = result.totalPages;
+      photo = result.results;
+      yield SearchShowResultState(photo);
+    }
   }
 }
