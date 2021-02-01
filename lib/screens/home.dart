@@ -1,14 +1,18 @@
+import 'dart:async';
+
 import 'package:FlutterGalleryApp/bloc/author/author_bloc.dart';
 import 'package:FlutterGalleryApp/bloc/collection/collection_bloc.dart';
 import 'package:FlutterGalleryApp/bloc/navigation/navigation_bloc.dart';
 import 'package:FlutterGalleryApp/bloc/navigation/navigation_event.dart';
 import 'package:FlutterGalleryApp/bloc/navigation/navigation_state.dart';
 import 'package:FlutterGalleryApp/bloc/photo/photo_bloc.dart';
+import 'package:FlutterGalleryApp/main.dart';
 import 'package:FlutterGalleryApp/res/res.dart';
 import 'package:FlutterGalleryApp/screens/author_screen.dart';
 import 'package:FlutterGalleryApp/screens/photo_screen.dart';
 import 'package:FlutterGalleryApp/screens/profile_screen.dart';
 import 'package:FlutterGalleryApp/screens/search_screen.dart';
+import 'package:connectivity/connectivity.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -17,20 +21,19 @@ import 'package:flutter_icons/flutter_icons.dart';
 import 'collection_screen.dart';
 import 'feed_screen.dart';
 
-/*
 class Home extends StatefulWidget {
+  const Home({Key key}) : super(key: key);
   @override
-  State<StatefulWidget> createState() {
-    return _HomeState();
-  }
+  _HomeState createState() => _HomeState();
 }
-*/
-class Home extends StatelessWidget {
+
+class _HomeState extends State<Home> {
   List<Widget> pages = [
     Feed(key: new PageStorageKey("feed")),
     SearchScreen(key: new PageStorageKey("feed")),
     Profile(key: new PageStorageKey("profile"))
   ];
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<NavigationBloc, NavigationState>(

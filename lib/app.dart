@@ -1,6 +1,8 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:FlutterGalleryApp/bloc/app/app_bloc.dart';
+import 'package:FlutterGalleryApp/bloc/app/connectivity_bloc.dart';
 import 'package:FlutterGalleryApp/bloc/author/author_bloc.dart';
 import 'package:FlutterGalleryApp/bloc/author/author_collection_bloc.dart';
 import 'package:FlutterGalleryApp/bloc/author/author_like_bloc.dart';
@@ -13,6 +15,7 @@ import 'package:FlutterGalleryApp/bloc/profile/my_photo_bloc.dart';
 import 'package:FlutterGalleryApp/bloc/profile/profile_collection_bloc.dart';
 import 'package:FlutterGalleryApp/bloc/profile/profile_like_bloc.dart';
 import 'package:FlutterGalleryApp/bloc/search/search_bloc.dart';
+import 'package:FlutterGalleryApp/main.dart';
 import 'package:FlutterGalleryApp/res/res.dart';
 import 'package:FlutterGalleryApp/screens/feed_screen.dart';
 import 'package:FlutterGalleryApp/screens/home.dart';
@@ -22,12 +25,14 @@ import 'package:connectivity/connectivity.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_icons/flutter_icons.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'bloc/profile/profile_bloc.dart';
 
-class MyApp extends StatelessWidget {
-  final GlobalKey<NavigatorState> _navigatorKey = GlobalKey();
+class MyApp extends StatefulWidget {
+  final Connectivity _connectivity;
+  Stream<ConnectivityResult> onConnectivityChanged;
 
   PhotoListBloc _photoListBloc;
   PhotoBloc _photoBloc;
@@ -42,9 +47,13 @@ class MyApp extends StatelessWidget {
   AuthorPhotoBloc _authorPhotoBloc;
   AuthorCollectionBloc _authorCollectionBloc;
   SearchBloc _searchBloc;
+  ConnectivityBloc _connectivityBloc;
 
   AppBloc _appBloc;
-  MyApp() {
+  final GlobalKey<NavigatorState> _navigatorKey = GlobalKey();
+
+  MyApp(this._connectivity, {Key key}) : super(key: key) {
+    onConnectivityChanged = _connectivity.onConnectivityChanged;
     _photoListBloc = new PhotoListBloc();
     _photoBloc = new PhotoBloc();
     _myPhotoBloc = new MyPhotoBloc();
@@ -60,6 +69,7 @@ class MyApp extends StatelessWidget {
     _authorBloc = new AuthorBloc(
         _authorPhotoBloc, _authorLikeBloc, _authorCollectionBloc);
     _searchBloc = SearchBloc();
+    _connectivityBloc = ConnectivityBloc();
     _appBloc = new AppBloc(
         _collectionBloc,
         _navigationBloc,
@@ -72,35 +82,102 @@ class MyApp extends StatelessWidget {
   }
 
   @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  StreamSubscription subscription;
+  var connectivityOverlay = ConnectivityOverlay();
+
+  void initState() {
+    super.initState();
+    widget._connectivity.checkConnectivity().then((result) {
+      switch (result) {
+        case ConnectivityResult.wifi:
+          widget._connectivityBloc.add(ConnectivityOnEvent());
+          break;
+        case ConnectivityResult.mobile:
+          widget._connectivityBloc.add(ConnectivityOnEvent());
+          break;
+        case ConnectivityResult.none:
+          widget._connectivityBloc.add(ConnectivityOffEvent());
+          break;
+      }
+    });
+
+    subscription =
+        widget.onConnectivityChanged.listen((ConnectivityResult result) {
+      switch (result) {
+        case ConnectivityResult.wifi:
+          widget._connectivityBloc.add(ConnectivityOnEvent());
+          break;
+        case ConnectivityResult.mobile:
+          widget._connectivityBloc.add(ConnectivityOnEvent());
+          break;
+        case ConnectivityResult.none:
+          widget._connectivityBloc.add(ConnectivityOffEvent());
+          break;
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    subscription.cancel();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
         providers: [
-          BlocProvider<NavigationBloc>(create: (context) => _navigationBloc),
-          BlocProvider<PhotoListBloc>(create: (context) => _photoListBloc),
-          BlocProvider<PhotoBloc>(create: (context) => _photoBloc),
-          BlocProvider<ProfileBloc>(create: (context) => _profileBloc),
-          BlocProvider<MyPhotoBloc>(create: (context) => _myPhotoBloc),
-          BlocProvider<ProfileLikeBloc>(create: (context) => _profileLikeBloc),
+          BlocProvider<NavigationBloc>(
+              create: (context) => widget._navigationBloc),
+          BlocProvider<PhotoListBloc>(
+              create: (context) => widget._photoListBloc),
+          BlocProvider<PhotoBloc>(create: (context) => widget._photoBloc),
+          BlocProvider<ProfileBloc>(create: (context) => widget._profileBloc),
+          BlocProvider<MyPhotoBloc>(create: (context) => widget._myPhotoBloc),
+          BlocProvider<ProfileLikeBloc>(
+              create: (context) => widget._profileLikeBloc),
           BlocProvider<ProfileCollectionBloc>(
-              create: (context) => _profileCollectionBloc),
-          BlocProvider<CollectionBloc>(create: (context) => _collectionBloc),
-          BlocProvider<AuthorBloc>(create: (context) => _authorBloc),
-          BlocProvider<AuthorPhotoBloc>(create: (context) => _authorPhotoBloc),
+              create: (context) => widget._profileCollectionBloc),
+          BlocProvider<CollectionBloc>(
+              create: (context) => widget._collectionBloc),
+          BlocProvider<AuthorBloc>(create: (context) => widget._authorBloc),
+          BlocProvider<AuthorPhotoBloc>(
+              create: (context) => widget._authorPhotoBloc),
           BlocProvider<AuthorCollectionBloc>(
-              create: (context) => _authorCollectionBloc),
-          BlocProvider<AuthorLikeBloc>(create: (context) => _authorLikeBloc),
-          BlocProvider<SearchBloc>(create: (context) => _searchBloc),
-          BlocProvider<AppBloc>(create: (context) => _appBloc)
+              create: (context) => widget._authorCollectionBloc),
+          BlocProvider<AuthorLikeBloc>(
+              create: (context) => widget._authorLikeBloc),
+          BlocProvider<SearchBloc>(create: (context) => widget._searchBloc),
+          BlocProvider<ConnectivityBloc>(
+              create: (context) => widget._connectivityBloc),
+          BlocProvider<AppBloc>(create: (context) => widget._appBloc)
         ],
         child: MaterialApp(
-          navigatorKey: _navigatorKey,
+          navigatorKey: widget._navigatorKey,
           debugShowCheckedModeBanner: false,
           title: "Skillbranch app",
           theme: ThemeData(
               primarySwatch: Colors.blue,
               visualDensity: VisualDensity.adaptivePlatformDensity,
               textTheme: buildAppTextTheme()),
-          home: Home(),
+          home: BlocBuilder<ConnectivityBloc, ConnectivityState>(
+            builder: (context, state) {
+              if (state is ConnectivityOnState) {
+                return Home();
+              }
+              if (state is ConnectivityOffState) {
+                return NoInternetScreen();
+              }
+              if (state is ConnectivityInitialState) {
+                return CircularProgressIndicator();
+              }
+              widget._connectivity.checkConnectivity();
+            },
+          ),
           onGenerateRoute: (RouteSettings settings) {
             if (settings.name == '/fullScreenImage') {
               final route = FullScreenImage();
@@ -115,6 +192,23 @@ class MyApp extends StatelessWidget {
   }
 }
 
+class NoInternetScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(AntDesign.wifi, size: 100, color: AppColors.grayChateau),
+            SizedBox(height: 10),
+            Text("There was an error loading the feed"),
+          ],
+        ),
+      ),
+    );
+  }
+}
 /*
 class MyApp extends StatelessWidget {
   final Stream<ConnectivityResult> onConnectivityChanged;
