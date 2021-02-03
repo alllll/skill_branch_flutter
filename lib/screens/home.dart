@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:FlutterGalleryApp/bloc/app/app_bloc.dart';
 import 'package:FlutterGalleryApp/bloc/author/author_bloc.dart';
 import 'package:FlutterGalleryApp/bloc/collection/collection_bloc.dart';
 import 'package:FlutterGalleryApp/bloc/navigation/navigation_bloc.dart';
@@ -13,6 +14,7 @@ import 'package:FlutterGalleryApp/screens/photo_screen.dart';
 import 'package:FlutterGalleryApp/screens/profile_screen.dart';
 import 'package:FlutterGalleryApp/screens/search_screen.dart';
 import 'package:connectivity/connectivity.dart';
+import 'package:flushbar/flushbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -92,7 +94,21 @@ class _HomeState extends State<Home> {
               }
             },
             child: Container(),
-          )
+          ),
+          BlocListener<AppBloc, AppState>(listener: (context, state) {
+            if (state is AppNotificationState) {
+              Flushbar(
+                margin: EdgeInsets.all(5),
+                borderRadius: 8,
+                flushbarPosition: FlushbarPosition.TOP,
+                duration: Duration(seconds: 5),
+                isDismissible: true,
+                message: state.text,
+                icon: Icon(AntDesign.warning, color: Colors.white),
+                backgroundColor: Colors.red,
+              )..show(context);
+            }
+          }),
         ], child: pages[(state as NavigationTabState).tabItemIndex]),
       );
     });

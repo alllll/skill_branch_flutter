@@ -45,32 +45,42 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     AppEvent event,
   ) async* {
     if (event is AppPhotoLikeEvent) {
-      //TODO: check auth!
-      await _unsplashRepository.likePhoto(event.photoId);
-      _profileLikeBloc.add(ProfileLikeReloadEvent(_profileBloc.user));
-      var photos =
-          _photoListBloc.photo.where((element) => element.id == event.photoId);
-      if (photos.length == 1) {
-        photos.elementAt(0).likedByUser = true;
-        photos.elementAt(0).likes++;
+      if (_profileBloc.isAuthenticated) {
+        await _unsplashRepository.likePhoto(event.photoId);
+        _profileLikeBloc.add(ProfileLikeReloadEvent(_profileBloc.user));
+        var photos = _photoListBloc.photo
+            .where((element) => element.id == event.photoId);
+        if (photos.length == 1) {
+          photos.elementAt(0).likedByUser = true;
+          photos.elementAt(0).likes++;
+        }
+      } else {
+        yield AppNotificationState("Необходимо авторизоваться!");
       }
     }
 
     if (event is AppPhotoUnlikeEvent) {
-      //TODO: check auth!
-      await _unsplashRepository.unlikePhoto(event.photoId);
-      var photos =
-          _photoListBloc.photo.where((element) => element.id == event.photoId);
-      if (photos.length == 1) {
-        photos.elementAt(0).likedByUser = false;
-        photos.elementAt(0).likes--;
-      }
+      if (_profileBloc.isAuthenticated) {
+        await _unsplashRepository.unlikePhoto(event.photoId);
+        var photos = _photoListBloc.photo
+            .where((element) => element.id == event.photoId);
+        if (photos.length == 1) {
+          photos.elementAt(0).likedByUser = false;
+          photos.elementAt(0).likes--;
+        }
 
-      _profileLikeBloc.add(ProfileLikeReloadEvent(_profileBloc.user));
+        _profileLikeBloc.add(ProfileLikeReloadEvent(_profileBloc.user));
+      } else {
+        yield AppNotificationState("Необходимо авторизоваться!");
+      }
     }
 
     if (event is AppRebuildEvent) {
       _photoListBloc.add(PhotoListRebuild());
+    }
+
+    if (event is AppReloadEvent) {
+      _photoListBloc.add(PhotoListReload());
     }
   }
 }

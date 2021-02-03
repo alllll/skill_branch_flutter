@@ -67,7 +67,7 @@ _listPhoto(context, List<Photo> photo, ScrollController controller) {
       onRefresh: () async {
         //BlocProvider.of<PhotoListBloc>(context).add(PhotoListReload());
         print("refreshing");
-        BlocProvider.of<PhotoListBloc>(context).add(PhotoListRebuild());
+        BlocProvider.of<PhotoListBloc>(context).add(PhotoListReload());
         return null;
       },
       child: ShaderMask(
@@ -135,14 +135,14 @@ Widget _buildItem(BuildContext context, Photo photo, int index) {
     children: <Widget>[
       GestureDetector(
         onTap: () {
-          BlocProvider.of<PhotoBloc>(context).add(PhotoEventChoice(photo.id));
+          BlocProvider.of<PhotoBloc>(context).add(PhotoEventChoice(photo));
           /* BlocProvider.of<NavigationBloc>(context)
               .add(NavigationFullScreenPhotoEvent());*/
         },
         child: Hero(
           tag: photo.id,
           child: PhotoW(
-            photoLink: photo.urls.small,
+            photo: photo,
           ),
         ),
       ),

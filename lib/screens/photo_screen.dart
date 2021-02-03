@@ -203,7 +203,7 @@ class _FullScreenImageState extends State<FullScreenImage>
             Hero(
               tag: (state).photo.id,
               child: PhotoW(
-                photoLink: (state).photo.urls.small,
+                photo: state.photo,
               ),
             ),
             Padding(
@@ -313,7 +313,7 @@ class _FullScreenImageState extends State<FullScreenImage>
             Hero(
               tag: state.photo.id,
               child: PhotoW(
-                photoLink: state.photo.urls.small,
+                photo: state.photo,
               ),
             ),
             Padding(

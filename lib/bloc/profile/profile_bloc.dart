@@ -32,8 +32,8 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   Stream<ProfileState> mapEventToState(
     ProfileEvent event,
   ) async* {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
     if (event is ProfileCheckAuth) {
-      SharedPreferences prefs = await SharedPreferences.getInstance();
       if (prefs.containsKey("token")) {
         String token = prefs.getString("token");
         if (token.isNotEmpty) {
@@ -44,24 +44,30 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
           _profileLikeBloc.add(ProfileLikeLoadingEvent(user));
           _profileCollectionBloc.add(ProfileCollectionLoadingEvent(user));
         }
-      } else
+      } else {
+        isAuthenticated = false;
+        user = null;
         yield ProfileNoAutheticatedState();
+      }
     }
 
     if (event is ProfileAuthenticatedEvent) {
-      SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs = await SharedPreferences.getInstance();
       prefs.setString("token", event.token);
       isAuthenticated = true;
-      User user = await unsplashRepository.fetchMyUserProfile();
+      user = await unsplashRepository.fetchMyUserProfile();
       yield ProfileAuthenticatedState(user);
       _myPhotoBloc.add(MyPhotoLoadingEvent(user));
       _profileLikeBloc.add(ProfileLikeLoadingEvent(user));
     }
 
     if (event is ProfileLogoutEvent) {
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      prefs.remove("token");
-      add(ProfileCheckAuth());
+      prefs = await SharedPreferences.getInstance();
+      prefs.remove("token").then((value) {
+        if (value) {
+          add(ProfileCheckAuth());
+        }
+      });
     }
   }
 }

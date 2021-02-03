@@ -1,14 +1,21 @@
+import 'dart:typed_data';
+
+import 'package:FlutterGalleryApp/model/photo.dart';
 import 'package:FlutterGalleryApp/res/res.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_blurhash/flutter_blurhash.dart';
 
 class PhotoW extends StatelessWidget {
-  PhotoW({Key key, this.photoLink}) : super(key: key);
+  final Photo photo;
+  PhotoW({Key key, this.photo}) : super(key: key);
 
-  final String photoLink;
   @override
   Widget build(BuildContext context) {
+    // BlurHash.decode(photo.blurHash, photo.width, photo.height);
+
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       child: ClipRRect(
@@ -16,11 +23,17 @@ class PhotoW extends StatelessWidget {
         child: Container(
           color: AppColors.grayChateau,
           child: CachedNetworkImage(
-            imageUrl: photoLink,
-            /*   placeholder: (context, url) =>
-                Center(child: CircularProgressIndicator()),*/
+            imageUrl: photo.urls.small,
+            placeholder: (context, url) {
+              return AspectRatio(
+                aspectRatio: photo.width / photo.height,
+                child: BlurHash(
+                  hash: photo.blurHash,
+                ),
+              );
+            },
             errorWidget: (context, url, error) => Icon(Icons.error),
-            fit: BoxFit.fill,
+            fit: BoxFit.cover,
           ),
         ),
       ),

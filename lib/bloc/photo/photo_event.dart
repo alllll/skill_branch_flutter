@@ -4,8 +4,8 @@ part of 'photo_bloc.dart';
 abstract class PhotoEvent {}
 
 class PhotoEventChoice extends PhotoEvent {
-  String id;
-  PhotoEventChoice(this.id);
+  Photo photo;
+  PhotoEventChoice(this.photo);
 }
 
 class PhotoEventLike extends PhotoEvent {

@@ -1,3 +1,4 @@
+import 'package:FlutterGalleryApp/bloc/app/app_bloc.dart';
 import 'package:FlutterGalleryApp/bloc/collection/collection_bloc.dart';
 import 'package:FlutterGalleryApp/bloc/navigation/navigation_bloc.dart';
 import 'package:FlutterGalleryApp/bloc/navigation/navigation_event.dart';
@@ -40,6 +41,7 @@ class _ProfileState extends State<Profile> {
             BlocProvider.of<ProfileBloc>(context).secretKey,
             "https://alllll.ru", (String token) {
           print("Event to Bloc!");
+
           BlocProvider.of<ProfileBloc>(context)
               .add(ProfileAuthenticatedEvent(token));
         }, true);
@@ -255,7 +257,7 @@ Widget _buildListMyPhotoList(User user) {
                 return GestureDetector(
                   onTap: () {
                     BlocProvider.of<PhotoBloc>(context)
-                        .add(PhotoEventChoice(state.photo[i].id));
+                        .add(PhotoEventChoice(state.photo[i]));
                   },
                   child: Hero(
                     tag: state.photo[i].id,
@@ -304,7 +306,7 @@ Widget _buildListMyLikes(User user) {
                 return GestureDetector(
                   onTap: () {
                     BlocProvider.of<PhotoBloc>(context)
-                        .add(PhotoEventChoice(state.photo[i].id));
+                        .add(PhotoEventChoice(state.photo[i]));
                   },
                   child: Hero(
                     tag: state.photo[i].id,

@@ -14,3 +14,5 @@ class AppPhotoUnlikeEvent extends AppEvent {
 }
 
 class AppRebuildEvent extends AppEvent {}
+
+class AppReloadEvent extends AppEvent {}

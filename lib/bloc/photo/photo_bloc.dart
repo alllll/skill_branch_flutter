@@ -22,7 +22,8 @@ class PhotoBloc extends Bloc<PhotoEvent, PhotoState> {
   ) async* {
     if (event is PhotoEventChoice) {
       yield PhotoLoading();
-      currentPhoto = await photoRepository.fetchPhoto(event.id);
+      //currentPhoto = await photoRepository.fetchPhoto(event.photo.id);
+      currentPhoto = event.photo;
       relatedPhoto =
           (await photoRepository.searchPhotoRelated(currentPhoto.id)).results;
       yield PhotoLoaded(currentPhoto, relatedPhoto);

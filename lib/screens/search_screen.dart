@@ -113,7 +113,7 @@ class SearchGrid extends StatelessWidget {
             itemBuilder: (context, index) {
               return GestureDetector(
                   onTap: () => BlocProvider.of<PhotoBloc>(context)
-                      .add(PhotoEventChoice(photo[index].id)),
+                      .add(PhotoEventChoice(photo[index])),
                   child: Hero(
                       tag: photo[index].id,
                       child: ImageCard(imageUrl: photo[index].urls.small)));

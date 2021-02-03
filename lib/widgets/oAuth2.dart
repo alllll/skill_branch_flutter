@@ -36,8 +36,21 @@ class _OAuth2State extends State<OAuth2> {
   @override
   Widget build(BuildContext context) {
     if (widget.clearCookies) {
-      _cookieManager.clearCookies();
-    }
+      return FutureBuilder<bool>(
+        future: _cookieManager.clearCookies(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return Center(child: CircularProgressIndicator());
+          } else {
+            return _createWebView();
+          }
+        },
+      );
+    } else
+      return _createWebView();
+  }
+
+  Widget _createWebView() {
     return WebView(
       initialUrl: widget.initialUrl +
           "?client_id=" +

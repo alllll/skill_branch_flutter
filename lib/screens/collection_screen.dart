@@ -94,14 +94,14 @@ class CollectionScreen extends StatelessWidget {
       children: <Widget>[
         GestureDetector(
           onTap: () {
-            BlocProvider.of<PhotoBloc>(context).add(PhotoEventChoice(photo.id));
+            BlocProvider.of<PhotoBloc>(context).add(PhotoEventChoice(photo));
             /* BlocProvider.of<NavigationBloc>(context)
               .add(NavigationFullScreenPhotoEvent());*/
           },
           child: Hero(
             tag: photo.id,
             child: PhotoW(
-              photoLink: photo.urls.small,
+              photo: photo,
             ),
           ),
         ),

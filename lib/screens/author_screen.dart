@@ -243,7 +243,7 @@ Widget _buildListMyPhotoList(User user) {
                   key: UniqueKey(),
                   onTap: () {
                     BlocProvider.of<PhotoBloc>(context)
-                        .add(PhotoEventChoice(state.photo[i].id));
+                        .add(PhotoEventChoice(state.photo[i]));
                   },
                   child: Hero(
                     tag: state.photo[i].id,
@@ -293,7 +293,7 @@ Widget _buildListMyLikes(User user) {
                   key: UniqueKey(),
                   onTap: () {
                     BlocProvider.of<PhotoBloc>(context)
-                        .add(PhotoEventChoice(state.photo[i].id));
+                        .add(PhotoEventChoice(state.photo[i]));
                   },
                   child: Hero(
                     tag: state.photo[i].id,
