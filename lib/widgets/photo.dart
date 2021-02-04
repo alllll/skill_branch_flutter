@@ -28,7 +28,9 @@ class PhotoW extends StatelessWidget {
               return AspectRatio(
                 aspectRatio: photo.width / photo.height,
                 child: BlurHash(
-                  hash: photo.blurHash,
+                  hash: photo.blurHash != null
+                      ? photo.blurHash
+                      : "L0JkyE-;j[.8_3ayogWBofaxayay",
                 ),
               );
             },

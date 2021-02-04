@@ -13,6 +13,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_blurhash/flutter_blurhash.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
 
@@ -253,8 +254,17 @@ Widget _buildListMyPhotoList(User user) {
                         borderRadius: BorderRadius.circular(10.0),
                       ),
                       child: CachedNetworkImage(
-                        placeholder: (context, url) =>
-                            CircularProgressIndicator(),
+                        placeholder: (context, url) {
+                          return AspectRatio(
+                            aspectRatio:
+                                state.photo[i].width / state.photo[i].height,
+                            child: BlurHash(
+                              hash: state.photo[i].blurHash != null
+                                  ? state.photo[i].blurHash
+                                  : "L0JkyE-;j[.8_3ayogWBofaxayay",
+                            ),
+                          );
+                        },
                         fit: BoxFit.cover,
                         imageUrl: state.photo[i].urls.small,
                       ),
@@ -303,8 +313,17 @@ Widget _buildListMyLikes(User user) {
                         borderRadius: BorderRadius.circular(10.0),
                       ),
                       child: CachedNetworkImage(
-                        placeholder: (context, url) =>
-                            CircularProgressIndicator(),
+                        placeholder: (context, url) {
+                          return AspectRatio(
+                            aspectRatio:
+                                state.photo[i].width / state.photo[i].height,
+                            child: BlurHash(
+                              hash: state.photo[i].blurHash != null
+                                  ? state.photo[i].blurHash
+                                  : "L0JkyE-;j[.8_3ayogWBofaxayay",
+                            ),
+                          );
+                        },
                         fit: BoxFit.cover,
                         imageUrl: state.photo[i].urls.small,
                       ),
@@ -356,8 +375,21 @@ Widget _buildListMyCollections(User user) {
                       ),
                       child: state.collections[i].totalPhotos > 0
                           ? CachedNetworkImage(
-                              placeholder: (context, url) =>
-                                  CircularProgressIndicator(),
+                              placeholder: (context, url) {
+                                return AspectRatio(
+                                  aspectRatio: state
+                                          .collections[i].coverPhoto.width /
+                                      state.collections[i].coverPhoto.height,
+                                  child: BlurHash(
+                                    hash: state.collections[i].coverPhoto
+                                                .blurHash !=
+                                            null
+                                        ? state
+                                            .collections[i].coverPhoto.blurHash
+                                        : "L0JkyE-;j[.8_3ayogWBofaxayay",
+                                  ),
+                                );
+                              },
                               fit: BoxFit.cover,
                               imageUrl:
                                   state.collections[i].coverPhoto.urls.small,

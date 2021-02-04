@@ -13,6 +13,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_blurhash/flutter_blurhash.dart';
 import 'package:gallery_saver/gallery_saver.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -289,8 +290,17 @@ class _FullScreenImageState extends State<FullScreenImage>
                           borderRadius: BorderRadius.circular(10.0),
                         ),
                         child: CachedNetworkImage(
-                          placeholder: (context, url) =>
-                              CircularProgressIndicator(),
+                          placeholder: (context, url) {
+                            return AspectRatio(
+                              aspectRatio: state.relatedPhoto[i].width /
+                                  state.relatedPhoto[i].height,
+                              child: BlurHash(
+                                hash: state.relatedPhoto[i].blurHash != null
+                                    ? state.relatedPhoto[i].blurHash
+                                    : "L0JkyE-;j[.8_3ayogWBofaxayay",
+                              ),
+                            );
+                          },
                           fit: BoxFit.cover,
                           imageUrl: (state).relatedPhoto[i].urls.small,
                         ),
@@ -399,8 +409,15 @@ class _FullScreenImageState extends State<FullScreenImage>
                           borderRadius: BorderRadius.circular(10.0),
                         ),
                         child: CachedNetworkImage(
-                          placeholder: (context, url) =>
-                              CircularProgressIndicator(),
+                          placeholder: (context, url) {
+                            return AspectRatio(
+                              aspectRatio: state.relatedPhoto[i].width /
+                                  state.relatedPhoto[i].height,
+                              child: BlurHash(
+                                hash: state.relatedPhoto[i].blurHash,
+                              ),
+                            );
+                          },
                           fit: BoxFit.cover,
                           imageUrl: state.relatedPhoto[i].urls.small,
                         ),
