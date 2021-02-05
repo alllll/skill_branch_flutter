@@ -2,6 +2,7 @@ import 'package:FlutterGalleryApp/bloc/photo/photo_bloc.dart';
 import 'package:FlutterGalleryApp/bloc/search/search_bloc.dart';
 import 'package:FlutterGalleryApp/model/photo.dart';
 import 'package:FlutterGalleryApp/res/colors.dart';
+import 'package:FlutterGalleryApp/widgets/trinity_circular_progress.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -58,6 +59,12 @@ class _SearchScreenState extends State<SearchScreen> {
                 builder: (context, state) {
                   if (state is SearchInitialState) {
                     return Container();
+                    /* return Container(
+                      color: Colors.red,
+                      width: 300,
+                      height: 100,
+                      child: TrinityCircularProgress(),
+                    );*/
                   }
                   if (state is SearchLoadingState) {
                     return Center(child: CircularProgressIndicator());
