@@ -190,7 +190,7 @@ Widget _buildProfileDetailsInfo(BuildContext context, User user) {
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 5, 0, 0),
                 child: Offstage(
-                  offstage: user.location == null ? true : false,
+                  offstage: user.portfolioUrl == null ? true : false,
                   child: Row(
                     children: [
                       Icon(
