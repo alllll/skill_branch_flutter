@@ -4,6 +4,7 @@ import 'package:FlutterGalleryApp/bloc/notification/notification_bloc.dart';
 import 'package:FlutterGalleryApp/model/photo.dart';
 import 'package:FlutterGalleryApp/repository/unsplash_repository.dart';
 import 'package:bloc/bloc.dart';
+import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 
 part 'collection_event.dart';
@@ -37,7 +38,8 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
         yield CollectionLoading();
         photo = await unsplashRepository.fetchPhotoOfCollection(
             collectionId, _page, _perPage);
-        yield CollectionLoaded(photo);
+        //yield CollectionLoaded(photo);
+        yield CollectionReloadedState(photo);
       }
 
       if (event is CollectionEventAdd) {

@@ -51,7 +51,7 @@ class PhotoApiProvider {
         Exception("failed load photos");
     } on DioError catch (err) {
       print(err);
-      throw (err);
+      throw (err.response.data.toString());
     }
   }
 
@@ -70,7 +70,7 @@ class PhotoApiProvider {
         Exception("failed load photo");
     } on DioError catch (err) {
       print(err);
-      throw (err);
+      throw (err.response.data.toString());
     }
   }
 
@@ -87,7 +87,7 @@ class PhotoApiProvider {
         Exception("failed load my profile");
     } on DioError catch (err) {
       print(err);
-      throw (err);
+      throw (err.response.data.toString());
     }
   }
 
@@ -103,7 +103,7 @@ class PhotoApiProvider {
         Exception("failed load my profile");
     } on DioError catch (err) {
       print(err);
-      throw (err);
+      throw (err.response.data.toString());
     }
   }
 
@@ -124,7 +124,7 @@ class PhotoApiProvider {
         Exception("failed load user photos");
     } on DioError catch (err) {
       print(err);
-      throw (err);
+      throw (err.response.data.toString());
     }
   }
 
@@ -145,7 +145,7 @@ class PhotoApiProvider {
         Exception("failed load likes");
     } on DioError catch (err) {
       print(err);
-      throw (err);
+      throw (err.response.data.toString());
     }
   }
 
@@ -167,7 +167,7 @@ class PhotoApiProvider {
         Exception("failed load likes");
     } on DioError catch (err) {
       print(err);
-      throw (err);
+      throw (err.response.data.toString());
     }
   }
 
@@ -189,7 +189,7 @@ class PhotoApiProvider {
         Exception("failed load photos");
     } on DioError catch (err) {
       print(err);
-      throw (err);
+      throw (err.response.data.toString());
     }
   }
 
@@ -206,7 +206,7 @@ class PhotoApiProvider {
         Exception("failed load photos");
     } on DioError catch (err) {
       print(err);
-      throw (err);
+      throw (err.response.data.toString());
     }
   }
 
@@ -222,7 +222,7 @@ class PhotoApiProvider {
         Exception("failed load photos");
     } on DioError catch (err) {
       print(err);
-      throw (err);
+      throw (err.response.data.toString());
     }
   }
 
@@ -238,7 +238,7 @@ class PhotoApiProvider {
         Exception("failed search photos");
     } on DioError catch (err) {
       print(err);
-      throw (err);
+      throw (err.response.data.toString());
     }
   }
 
@@ -257,7 +257,7 @@ class PhotoApiProvider {
         Exception("failed search photos");
     } on DioError catch (err) {
       print(err);
-      throw (err);
+      throw (err.response.data.toString());
     }
   }
 }

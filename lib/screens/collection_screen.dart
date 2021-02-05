@@ -36,6 +36,10 @@ class CollectionScreen extends StatelessWidget {
             if (state is CollectionLoaded) {
               return _listPhoto(context, state.photo);
             }
+
+            if (state is CollectionReloadedState) {
+              return _listPhoto(context, state.photo);
+            }
             return Center(child: CircularProgressIndicator());
           }),
         ));

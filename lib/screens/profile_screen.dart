@@ -15,6 +15,7 @@ import 'package:FlutterGalleryApp/screens/photo_screen.dart';
 import 'package:FlutterGalleryApp/widgets/oAuth2.dart';
 import 'package:FlutterGalleryApp/widgets/read_more_text.dart';
 import 'package:FlutterGalleryApp/widgets/user_avatar.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -201,7 +202,9 @@ Widget _buildProfileDetailsInfo(BuildContext context, User user) {
                         size: 17,
                       ),
                       SizedBox(width: 3),
-                      Text(user.location ?? "")
+                      Container(
+                          width: 220,
+                          child: AutoSizeText(user.location ?? "", maxLines: 1))
                     ],
                   ),
                 ),
@@ -218,7 +221,10 @@ Widget _buildProfileDetailsInfo(BuildContext context, User user) {
                         size: 17,
                       ),
                       SizedBox(width: 3),
-                      Text(user.portfolioUrl ?? "")
+                      Container(
+                          width: 220,
+                          child: AutoSizeText(user.portfolioUrl ?? "",
+                              maxLines: 1))
                     ],
                   ),
                 ),
