@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:collection';
 
+import 'package:FlutterGalleryApp/bloc/notification/notification_bloc.dart';
+import 'package:FlutterGalleryApp/bloc/photo/photo_related_bloc.dart';
 import 'package:FlutterGalleryApp/model/photo.dart';
 import 'package:FlutterGalleryApp/repository/unsplash_repository.dart';
 import 'package:bloc/bloc.dart';
@@ -10,50 +12,57 @@ part 'photo_event.dart';
 part 'photo_state.dart';
 
 class PhotoBloc extends Bloc<PhotoEvent, PhotoState> {
-  PhotoBloc() : super(PhotoInitial());
+  PhotoBloc(this._photoRelatedBloc, this._notificationBloc)
+      : super(PhotoInitial());
+
+  PhotoRelatedBloc _photoRelatedBloc;
+  NotificationBloc _notificationBloc;
+
   UnsplashRepository photoRepository = new UnsplashRepository();
   Photo currentPhoto;
-  List<Photo> relatedPhoto;
+
   Stack<PhotoBlocHistoryItem> history = new Stack();
 
   @override
   Stream<PhotoState> mapEventToState(
     PhotoEvent event,
   ) async* {
-    if (event is PhotoEventChoice) {
-      yield PhotoLoading();
-      //currentPhoto = await photoRepository.fetchPhoto(event.photo.id);
-      currentPhoto = event.photo;
-      relatedPhoto =
-          (await photoRepository.searchPhotoRelated(currentPhoto.id)).results;
-      yield PhotoLoaded(currentPhoto, relatedPhoto);
-    }
+    try {
+      if (event is PhotoEventChoice) {
+        yield PhotoLoading();
+        //currentPhoto = await photoRepository.fetchPhoto(event.photo.id);
+        currentPhoto = event.photo;
+        _photoRelatedBloc.add(PhotoRelatedShowEvent(currentPhoto.id));
+        yield PhotoLoaded(currentPhoto);
+      }
 
-    if (event is PhotoEventLike) {
-      await photoRepository.likePhoto(event.id);
-    }
+      if (event is PhotoEventLike) {
+        await photoRepository.likePhoto(event.id);
+      }
 
-    if (event is PhotoEventUnlike) {
-      await photoRepository.unlikePhoto(event.id);
-    }
+      if (event is PhotoEventUnlike) {
+        await photoRepository.unlikePhoto(event.id);
+      }
 
-    if (event is PhotoEventRelatedChoice) {
-      yield PhotoLoading();
-      currentPhoto = await photoRepository.fetchPhoto(event.id);
-      relatedPhoto =
-          (await photoRepository.searchPhotoRelated(currentPhoto.id)).results;
-      yield PhotoRebuild(currentPhoto, relatedPhoto);
-    }
+      if (event is PhotoEventRelatedChoice) {
+        yield PhotoLoading();
+        currentPhoto = await photoRepository.fetchPhoto(event.id);
+        _photoRelatedBloc.add(PhotoRelatedShowEvent(currentPhoto.id));
+        yield PhotoRebuild(currentPhoto);
+      }
 
-    if (event is PhotoEventHistoryBack) {
-      var historyItem = history.pop();
+      if (event is PhotoEventHistoryBack) {
+        /* var historyItem = history.pop();
       if (historyItem != null) {
         yield PhotoLoading();
         currentPhoto = historyItem.photo;
         relatedPhoto = historyItem.relatedPhoto;
         // ребилд
         yield PhotoRebuild(currentPhoto, relatedPhoto);
+      }*/
       }
+    } catch (e) {
+      _notificationBloc.add(NotificationShowEvent(e.toString()));
     }
   }
 }

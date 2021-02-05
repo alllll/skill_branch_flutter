@@ -16,3 +16,8 @@ class AppPhotoUnlikeEvent extends AppEvent {
 class AppRebuildEvent extends AppEvent {}
 
 class AppReloadEvent extends AppEvent {}
+
+class AppNotificationEvent extends AppEvent {
+  String text;
+  AppNotificationEvent(this.text);
+}

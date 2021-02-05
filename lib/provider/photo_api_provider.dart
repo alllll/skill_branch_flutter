@@ -18,176 +18,246 @@ class PhotoApiProvider {
       var token = prefs.getString("token");
       print(token);
       dio = new Dio(new BaseOptions(
-          baseUrl: baseUrl, headers: {'Authorization': 'Bearer $token'}));
+        baseUrl: baseUrl,
+        headers: {'Authorization': 'Bearer $token'},
+        /* validateStatus: (status) {
+          return status < 500;
+        },*/
+      ));
     } else {
-      dio = new Dio(new BaseOptions(baseUrl: baseUrl));
+      dio = new Dio(new BaseOptions(
+        baseUrl: baseUrl,
+        /*   validateStatus: (status) {
+          return status < 500;
+        },*/
+      ));
     }
   }
 
   Future<List<Photo>> fetchPhotos(int page, int perPage) async {
     await initDio();
-    final Response<String> response = await dio.get("/photos",
-        queryParameters: {
-          "client_id": clientId,
-          "page": page,
-          "per_page": perPage
-        });
-    print(response.headers["X-Ratelimit-Remaining"]);
-    if (response.statusCode == succesCode) {
-      //     print(response.data.toString());
-      return photosFromJson(response.data);
-    } else
-      Exception("failed load photos");
+    try {
+      final Response<String> response = await dio.get("/photos",
+          queryParameters: {
+            "client_id": clientId,
+            "page": page,
+            "per_page": perPage
+          });
+      print(response.headers["X-Ratelimit-Remaining"]);
+      if (response.statusCode == succesCode) {
+        //     print(response.data.toString());
+        return photosFromJson(response.data);
+      } else
+        Exception("failed load photos");
+    } on DioError catch (err) {
+      print(err);
+      throw (err);
+    }
   }
 
   Future<Photo> fetchPhoto(String id) async {
     await initDio();
-    final Response<String> response =
-        await dio.get("/photos/" + id, queryParameters: {
-      "client_id": clientId,
-    });
-    print(response.headers["X-Ratelimit-Remaining"]);
-    if (response.statusCode == succesCode) {
-      //    print(response.data.toString());
-      return photoFromJson(response.data);
-    } else
-      Exception("failed load photo");
+    try {
+      final Response<String> response =
+          await dio.get("/photos/" + id, queryParameters: {
+        "client_id": clientId,
+      });
+      print(response.headers["X-Ratelimit-Remaining"]);
+      if (response.statusCode == succesCode) {
+        //    print(response.data.toString());
+        return photoFromJson(response.data);
+      } else
+        Exception("failed load photo");
+    } on DioError catch (err) {
+      print(err);
+      throw (err);
+    }
   }
 
   Future<User> fetchMyUserProfile() async {
     await initDio();
-    final Response<String> response =
-        await dio.get("/me", queryParameters: {"client_id": clientId});
-    print(response.headers["X-Ratelimit-Remaining"]);
-    if (response.statusCode == succesCode) {
-      //    print(response.data.toString());
-      return userFromJson(response.data);
-    } else
-      Exception("failed load my profile");
+    try {
+      final Response<String> response =
+          await dio.get("/me", queryParameters: {"client_id": clientId});
+      print(response.headers["X-Ratelimit-Remaining"]);
+      if (response.statusCode == succesCode) {
+        //    print(response.data.toString());
+        return userFromJson(response.data);
+      } else
+        Exception("failed load my profile");
+    } on DioError catch (err) {
+      print(err);
+      throw (err);
+    }
   }
 
   Future<User> fetchUserProfile(String authorId) async {
     await initDio();
-    final Response<String> response = await dio
-        .get("/users/$authorId", queryParameters: {"client_id": clientId});
-    print(response.headers["X-Ratelimit-Remaining"]);
-    if (response.statusCode == succesCode) {
-      return userFromJson(response.data);
-    } else
-      Exception("failed load my profile");
+    try {
+      final Response<String> response = await dio
+          .get("/users/$authorId", queryParameters: {"client_id": clientId});
+      print(response.headers["X-Ratelimit-Remaining"]);
+      if (response.statusCode == succesCode) {
+        return userFromJson(response.data);
+      } else
+        Exception("failed load my profile");
+    } on DioError catch (err) {
+      print(err);
+      throw (err);
+    }
   }
 
   Future<List<Photo>> fetchUserPhoto(String user, int page, int perPage) async {
     await initDio();
-    final Response<String> response = await dio.get("/users/$user/photos",
-        queryParameters: {
-          "client_id": clientId,
-          "page": page,
-          "per_page": perPage
-        });
-    print(response.headers["X-Ratelimit-Remaining"]);
-    if (response.statusCode == succesCode) {
-      // print(response.data.toString());
-      return photosFromJson(response.data);
-    } else
-      Exception("failed load user photos");
+    try {
+      final Response<String> response = await dio.get("/users/$user/photos",
+          queryParameters: {
+            "client_id": clientId,
+            "page": page,
+            "per_page": perPage
+          });
+      print(response.headers["X-Ratelimit-Remaining"]);
+      if (response.statusCode == succesCode) {
+        // print(response.data.toString());
+        return photosFromJson(response.data);
+      } else
+        Exception("failed load user photos");
+    } on DioError catch (err) {
+      print(err);
+      throw (err);
+    }
   }
 
   Future<List<Photo>> fetchUserLikes(String user, int page, int perPage) async {
     await initDio();
-    final Response<String> response = await dio.get("/users/$user/likes",
-        queryParameters: {
-          "client_id": clientId,
-          "page": page,
-          "per_page": perPage
-        });
-    print(response.headers["X-Ratelimit-Remaining"]);
-    if (response.statusCode == succesCode) {
-      // print(response.data.toString());
-      return photosFromJson(response.data);
-    } else
-      Exception("failed load likes");
+    try {
+      final Response<String> response = await dio.get("/users/$user/likes",
+          queryParameters: {
+            "client_id": clientId,
+            "page": page,
+            "per_page": perPage
+          });
+      print(response.headers["X-Ratelimit-Remaining"]);
+      if (response.statusCode == succesCode) {
+        // print(response.data.toString());
+        return photosFromJson(response.data);
+      } else
+        Exception("failed load likes");
+    } on DioError catch (err) {
+      print(err);
+      throw (err);
+    }
   }
 
   Future<List<Collection>> fetchUserCollections(
       String user, int page, int perPage) async {
     await initDio();
-    final Response<String> response = await dio.get("/users/$user/collections",
-        queryParameters: {
-          "client_id": clientId,
-          "page": page,
-          "per_page": perPage
-        });
-    print(response.headers["X-Ratelimit-Remaining"]);
-    if (response.statusCode == succesCode) {
-      // print(response.data.toString());
-      return collectionFromJson(response.data);
-    } else
-      Exception("failed load likes");
+    try {
+      final Response<String> response = await dio
+          .get("/users/$user/collections", queryParameters: {
+        "client_id": clientId,
+        "page": page,
+        "per_page": perPage
+      });
+      print(response.headers["X-Ratelimit-Remaining"]);
+      if (response.statusCode == succesCode) {
+        // print(response.data.toString());
+        return collectionFromJson(response.data);
+      } else
+        Exception("failed load likes");
+    } on DioError catch (err) {
+      print(err);
+      throw (err);
+    }
   }
 
   Future<List<Photo>> fetchPhotoOfCollection(
       String collectionId, int page, int perPage) async {
     await initDio();
-    final Response<String> response = await dio
-        .get("/collections/$collectionId/photos", queryParameters: {
-      "client_id": clientId,
-      "page": page,
-      "per_page": perPage
-    });
-    print(response.headers["X-Ratelimit-Remaining"]);
-    if (response.statusCode == succesCode) {
-      // print(response.data.toString());
-      return photosFromJson(response.data);
-    } else
-      Exception("failed load photos");
+    try {
+      final Response<String> response = await dio
+          .get("/collections/$collectionId/photos", queryParameters: {
+        "client_id": clientId,
+        "page": page,
+        "per_page": perPage
+      });
+      print(response.headers["X-Ratelimit-Remaining"]);
+      if (response.statusCode == succesCode) {
+        // print(response.data.toString());
+        return photosFromJson(response.data);
+      } else
+        Exception("failed load photos");
+    } on DioError catch (err) {
+      print(err);
+      throw (err);
+    }
   }
 
   Future<Photo> likePhoto(String id) async {
     await initDio();
-    final Response<String> response = await dio
-        .post("/photos/$id/like", queryParameters: {"client_id": clientId});
-    print(response.headers["X-Ratelimit-Remaining"]);
-    if (response.statusCode == succesCode) {
-      // print(response.data.toString());
-      return photoFromJson(response.data);
-    } else
-      Exception("failed load photos");
+    try {
+      final Response<String> response = await dio
+          .post("/photos/$id/like", queryParameters: {"client_id": clientId});
+      print(response.headers["X-Ratelimit-Remaining"]);
+      if (response.statusCode == succesCode) {
+        // print(response.data.toString());
+        return photoFromJson(response.data);
+      } else
+        Exception("failed load photos");
+    } on DioError catch (err) {
+      print(err);
+      throw (err);
+    }
   }
 
   Future<bool> unlikePhoto(String id) async {
     await initDio();
-    final Response<String> response = await dio
-        .delete("/photos/$id/like", queryParameters: {"client_id": clientId});
-    print(response.headers["X-Ratelimit-Remaining"]);
-    if (response.statusCode == 204) {
-      return true;
-    } else
-      Exception("failed load photos");
+    try {
+      final Response<String> response = await dio
+          .delete("/photos/$id/like", queryParameters: {"client_id": clientId});
+      print(response.headers["X-Ratelimit-Remaining"]);
+      if (response.statusCode == 204) {
+        return true;
+      } else
+        Exception("failed load photos");
+    } on DioError catch (err) {
+      print(err);
+      throw (err);
+    }
   }
 
   Future<SearchResult> searchPhoto(String text, int page, int perPage) async {
     await initDio();
-    final Response<String> response = await dio.get("/search/photos",
-        queryParameters: {"query": text, "page": page, "per_page": perPage});
-    print(response.headers["X-Ratelimit-Remaining"]);
-    if (response.statusCode == succesCode) {
-      return searchResultFromJson(response.data);
-    } else
-      Exception("failed search photos");
+    try {
+      final Response<String> response = await dio.get("/search/photos",
+          queryParameters: {"query": text, "page": page, "per_page": perPage});
+      print(response.headers["X-Ratelimit-Remaining"]);
+      if (response.statusCode == succesCode) {
+        return searchResultFromJson(response.data);
+      } else
+        Exception("failed search photos");
+    } on DioError catch (err) {
+      print(err);
+      throw (err);
+    }
   }
 
   Future<SearchResult> searchPhotoRelated(String id) async {
     await initDio();
-    dio.options.baseUrl = "https://unsplash.com";
-    final Response<String> response =
-        await dio.get("/napi/photos/$id/related", queryParameters: {
-      "client_id": clientId,
-    });
-    print(response.headers["X-Ratelimit-Remaining"]);
-    if (response.statusCode == succesCode) {
-      return searchResultFromJson(response.data);
-    } else
-      Exception("failed search photos");
+    try {
+      dio.options.baseUrl = "https://unsplash.com";
+      final Response<String> response =
+          await dio.get("/napi/photos/$id/related", queryParameters: {
+        "client_id": clientId,
+      });
+      print(response.headers["X-Ratelimit-Remaining"]);
+      if (response.statusCode == succesCode) {
+        return searchResultFromJson(response.data);
+      } else
+        Exception("failed search photos");
+    } on DioError catch (err) {
+      print(err);
+      throw (err);
+    }
   }
 }

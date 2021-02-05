@@ -6,6 +6,7 @@ import 'package:FlutterGalleryApp/bloc/collection/collection_bloc.dart';
 import 'package:FlutterGalleryApp/bloc/navigation/navigation_bloc.dart';
 import 'package:FlutterGalleryApp/bloc/navigation/navigation_event.dart';
 import 'package:FlutterGalleryApp/bloc/navigation/navigation_state.dart';
+import 'package:FlutterGalleryApp/bloc/notification/notification_bloc.dart';
 import 'package:FlutterGalleryApp/bloc/photo/photo_bloc.dart';
 import 'package:FlutterGalleryApp/main.dart';
 import 'package:FlutterGalleryApp/res/res.dart';
@@ -97,6 +98,21 @@ class _HomeState extends State<Home> {
           ),
           BlocListener<AppBloc, AppState>(listener: (context, state) {
             if (state is AppNotificationState) {
+              Flushbar(
+                margin: EdgeInsets.all(5),
+                borderRadius: 8,
+                flushbarPosition: FlushbarPosition.TOP,
+                duration: Duration(seconds: 5),
+                isDismissible: true,
+                message: state.text,
+                icon: Icon(AntDesign.warning, color: Colors.white),
+                backgroundColor: Colors.red,
+              )..show(context);
+            }
+          }),
+          BlocListener<NotificationBloc, NotificationState>(
+              listener: (context, state) {
+            if (state is NotificationShowState) {
               Flushbar(
                 margin: EdgeInsets.all(5),
                 borderRadius: 8,

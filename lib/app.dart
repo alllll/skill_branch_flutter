@@ -9,8 +9,10 @@ import 'package:FlutterGalleryApp/bloc/author/author_like_bloc.dart';
 import 'package:FlutterGalleryApp/bloc/author/author_photo_bloc.dart';
 import 'package:FlutterGalleryApp/bloc/collection/collection_bloc.dart';
 import 'package:FlutterGalleryApp/bloc/navigation/navigation_bloc.dart';
+import 'package:FlutterGalleryApp/bloc/notification/notification_bloc.dart';
 import 'package:FlutterGalleryApp/bloc/photo/photo_bloc.dart';
 import 'package:FlutterGalleryApp/bloc/photo/photo_list_bloc.dart';
+import 'package:FlutterGalleryApp/bloc/photo/photo_related_bloc.dart';
 import 'package:FlutterGalleryApp/bloc/profile/my_photo_bloc.dart';
 import 'package:FlutterGalleryApp/bloc/profile/profile_collection_bloc.dart';
 import 'package:FlutterGalleryApp/bloc/profile/profile_like_bloc.dart';
@@ -33,7 +35,7 @@ import 'bloc/profile/profile_bloc.dart';
 class MyApp extends StatefulWidget {
   final Connectivity _connectivity;
   Stream<ConnectivityResult> onConnectivityChanged;
-
+  NotificationBloc _notificationBloc;
   PhotoListBloc _photoListBloc;
   PhotoBloc _photoBloc;
   MyPhotoBloc _myPhotoBloc;
@@ -48,27 +50,29 @@ class MyApp extends StatefulWidget {
   AuthorCollectionBloc _authorCollectionBloc;
   SearchBloc _searchBloc;
   ConnectivityBloc _connectivityBloc;
-
+  PhotoRelatedBloc _photoRelatedBloc;
   AppBloc _appBloc;
   final GlobalKey<NavigatorState> _navigatorKey = GlobalKey();
 
   MyApp(this._connectivity, {Key key}) : super(key: key) {
     onConnectivityChanged = _connectivity.onConnectivityChanged;
-    _photoListBloc = new PhotoListBloc();
-    _photoBloc = new PhotoBloc();
-    _myPhotoBloc = new MyPhotoBloc();
-    _profileLikeBloc = new ProfileLikeBloc();
-    _profileCollectionBloc = new ProfileCollectionBloc();
-    _profileBloc =
-        new ProfileBloc(_myPhotoBloc, _profileLikeBloc, _profileCollectionBloc);
-    _collectionBloc = new CollectionBloc();
+    _notificationBloc = new NotificationBloc();
+    _photoListBloc = new PhotoListBloc(_notificationBloc);
+    _photoRelatedBloc = new PhotoRelatedBloc(_notificationBloc);
+    _photoBloc = new PhotoBloc(_photoRelatedBloc, _notificationBloc);
+    _myPhotoBloc = new MyPhotoBloc(_notificationBloc);
+    _profileLikeBloc = new ProfileLikeBloc(_notificationBloc);
+    _profileCollectionBloc = new ProfileCollectionBloc(_notificationBloc);
+    _profileBloc = new ProfileBloc(_myPhotoBloc, _profileLikeBloc,
+        _profileCollectionBloc, _notificationBloc);
+    _collectionBloc = new CollectionBloc(_notificationBloc);
     _navigationBloc = new NavigationBloc(_navigatorKey);
-    _authorLikeBloc = new AuthorLikeBloc();
-    _authorCollectionBloc = new AuthorCollectionBloc();
-    _authorPhotoBloc = new AuthorPhotoBloc();
-    _authorBloc = new AuthorBloc(
-        _authorPhotoBloc, _authorLikeBloc, _authorCollectionBloc);
-    _searchBloc = SearchBloc();
+    _authorLikeBloc = new AuthorLikeBloc(_notificationBloc);
+    _authorCollectionBloc = new AuthorCollectionBloc(_notificationBloc);
+    _authorPhotoBloc = new AuthorPhotoBloc(_notificationBloc);
+    _authorBloc = new AuthorBloc(_authorPhotoBloc, _authorLikeBloc,
+        _authorCollectionBloc, _notificationBloc);
+    _searchBloc = SearchBloc(_notificationBloc);
     _connectivityBloc = ConnectivityBloc();
     _appBloc = new AppBloc(
         _collectionBloc,
@@ -154,6 +158,12 @@ class _MyAppState extends State<MyApp> {
           BlocProvider<SearchBloc>(create: (context) => widget._searchBloc),
           BlocProvider<ConnectivityBloc>(
               create: (context) => widget._connectivityBloc),
+          BlocProvider<PhotoRelatedBloc>(
+            create: (context) => widget._photoRelatedBloc,
+          ),
+          BlocProvider<NotificationBloc>(
+            create: (context) => widget._notificationBloc,
+          ),
           BlocProvider<AppBloc>(create: (context) => widget._appBloc)
         ],
         child: MaterialApp(

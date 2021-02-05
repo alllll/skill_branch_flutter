@@ -4,6 +4,7 @@ import 'package:FlutterGalleryApp/bloc/app/app_bloc.dart';
 import 'package:FlutterGalleryApp/bloc/navigation/navigation_bloc.dart';
 import 'package:FlutterGalleryApp/bloc/navigation/navigation_event.dart';
 import 'package:FlutterGalleryApp/bloc/photo/photo_bloc.dart';
+import 'package:FlutterGalleryApp/bloc/photo/photo_related_bloc.dart';
 import 'package:FlutterGalleryApp/model/photo.dart';
 import 'package:FlutterGalleryApp/res/res.dart';
 import 'package:FlutterGalleryApp/widgets/claim_bottom_sheet.dart';
@@ -270,44 +271,54 @@ class _FullScreenImageState extends State<FullScreenImage>
                 ],
               ),
             ),
-            GridView.builder(
-                primary: false,
-                shrinkWrap: true,
-                itemCount: (state).relatedPhoto.length,
-                gridDelegate: new SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 3),
-                itemBuilder: (context, i) {
-                  return GestureDetector(
-                    onTap: () {
-                      BlocProvider.of<PhotoBloc>(context).add(
-                          PhotoEventRelatedChoice((state).relatedPhoto[i].id));
-                    },
-                    child: Hero(
-                      tag: (state).relatedPhoto[i].id,
-                      child: Card(
-                        clipBehavior: Clip.antiAliasWithSaveLayer,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10.0),
-                        ),
-                        child: CachedNetworkImage(
-                          placeholder: (context, url) {
-                            return AspectRatio(
-                              aspectRatio: state.relatedPhoto[i].width /
-                                  state.relatedPhoto[i].height,
-                              child: BlurHash(
-                                hash: state.relatedPhoto[i].blurHash != null
-                                    ? state.relatedPhoto[i].blurHash
-                                    : "L0JkyE-;j[.8_3ayogWBofaxayay",
-                              ),
-                            );
+            BlocBuilder<PhotoRelatedBloc, PhotoRelatedState>(
+              builder: (context, state) {
+                if (state is PhotoRelatedLoadingState) {
+                  return CircularProgressIndicator();
+                }
+                if (state is PhotoRelatedShowState) {
+                  return GridView.builder(
+                      primary: false,
+                      shrinkWrap: true,
+                      itemCount: state.photo.length,
+                      gridDelegate:
+                          new SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 3),
+                      itemBuilder: (context, i) {
+                        return GestureDetector(
+                          onTap: () {
+                            BlocProvider.of<PhotoBloc>(context).add(
+                                PhotoEventRelatedChoice((state).photo[i].id));
                           },
-                          fit: BoxFit.cover,
-                          imageUrl: (state).relatedPhoto[i].urls.small,
-                        ),
-                      ),
-                    ),
-                  );
-                }),
+                          child: Hero(
+                            tag: (state).photo[i].id,
+                            child: Card(
+                              clipBehavior: Clip.antiAliasWithSaveLayer,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                              child: CachedNetworkImage(
+                                placeholder: (context, url) {
+                                  return AspectRatio(
+                                    aspectRatio: state.photo[i].width /
+                                        state.photo[i].height,
+                                    child: BlurHash(
+                                      hash: state.photo[i].blurHash != null
+                                          ? state.photo[i].blurHash
+                                          : "L0JkyE-;j[.8_3ayogWBofaxayay",
+                                    ),
+                                  );
+                                },
+                                fit: BoxFit.cover,
+                                imageUrl: (state).photo[i].urls.small,
+                              ),
+                            ),
+                          ),
+                        );
+                      });
+                }
+              },
+            ),
           ],
         ),
       );
@@ -389,42 +400,54 @@ class _FullScreenImageState extends State<FullScreenImage>
                 ],
               ),
             ),
-            GridView.builder(
-                primary: false,
-                shrinkWrap: true,
-                itemCount: state.relatedPhoto.length,
-                gridDelegate: new SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 3),
-                itemBuilder: (context, i) {
-                  return GestureDetector(
-                    onTap: () {
-                      BlocProvider.of<PhotoBloc>(context).add(
-                          PhotoEventRelatedChoice(state.relatedPhoto[i].id));
-                    },
-                    child: Hero(
-                      tag: state.relatedPhoto[i].id,
-                      child: Card(
-                        clipBehavior: Clip.antiAliasWithSaveLayer,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10.0),
-                        ),
-                        child: CachedNetworkImage(
-                          placeholder: (context, url) {
-                            return AspectRatio(
-                              aspectRatio: state.relatedPhoto[i].width /
-                                  state.relatedPhoto[i].height,
-                              child: BlurHash(
-                                hash: state.relatedPhoto[i].blurHash,
-                              ),
-                            );
+            BlocBuilder<PhotoRelatedBloc, PhotoRelatedState>(
+              builder: (context, state) {
+                if (state is PhotoRelatedLoadingState) {
+                  return CircularProgressIndicator();
+                }
+                if (state is PhotoRelatedShowState) {
+                  return GridView.builder(
+                      primary: false,
+                      shrinkWrap: true,
+                      itemCount: state.photo.length,
+                      gridDelegate:
+                          new SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 3),
+                      itemBuilder: (context, i) {
+                        return GestureDetector(
+                          onTap: () {
+                            BlocProvider.of<PhotoBloc>(context).add(
+                                PhotoEventRelatedChoice((state).photo[i].id));
                           },
-                          fit: BoxFit.cover,
-                          imageUrl: state.relatedPhoto[i].urls.small,
-                        ),
-                      ),
-                    ),
-                  );
-                }),
+                          child: Hero(
+                            tag: (state).photo[i].id,
+                            child: Card(
+                              clipBehavior: Clip.antiAliasWithSaveLayer,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                              child: CachedNetworkImage(
+                                placeholder: (context, url) {
+                                  return AspectRatio(
+                                    aspectRatio: state.photo[i].width /
+                                        state.photo[i].height,
+                                    child: BlurHash(
+                                      hash: state.photo[i].blurHash != null
+                                          ? state.photo[i].blurHash
+                                          : "L0JkyE-;j[.8_3ayogWBofaxayay",
+                                    ),
+                                  );
+                                },
+                                fit: BoxFit.cover,
+                                imageUrl: (state).photo[i].urls.small,
+                              ),
+                            ),
+                          ),
+                        );
+                      });
+                }
+              },
+            ),
           ],
         ),
       );
