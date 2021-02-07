@@ -59,12 +59,6 @@ class _SearchScreenState extends State<SearchScreen> {
                 builder: (context, state) {
                   if (state is SearchInitialState) {
                     return Container();
-                    /* return Container(
-                      color: Colors.red,
-                      width: 300,
-                      height: 100,
-                      child: TrinityCircularProgress(),
-                    );*/
                   }
                   if (state is SearchLoadingState) {
                     return Center(child: CircularProgressIndicator());
@@ -72,7 +66,7 @@ class _SearchScreenState extends State<SearchScreen> {
                   if (state is SearchShowResultState) {
                     return SearchGrid(state.photo);
                   }
-                  return CircularProgressIndicator();
+                  return TrinityCircularProgress();
                 },
               ),
             )

@@ -6,13 +6,17 @@ class TrinityCircularProgress extends StatefulWidget {
   final double percentage = 0;
   TrinityCircularProgress(
       {Key key,
-      this.color1 = Colors.blue,
-      this.color2 = Colors.lightBlue,
-      this.color3 = Colors.lightBlueAccent})
+      this.color1 = const Color.fromRGBO(22, 185, 253, 1),
+      this.color2 = const Color.fromRGBO(80, 202, 253, 1),
+      this.color3 = const Color.fromRGBO(145, 222, 254, 1),
+      this.width = 50,
+      this.height = 50})
       : super(key: key);
   final Color color1;
   final Color color2;
   final Color color3;
+  final double width;
+  final double height;
   @override
   _TrinityCircularProgressState createState() =>
       _TrinityCircularProgressState();
@@ -26,12 +30,8 @@ class _TrinityCircularProgressState extends State<TrinityCircularProgress>
   void initState() {
     oldPercentage = widget.percentage;
     controller =
-        AnimationController(vsync: this, duration: Duration(seconds: 5));
-    controller.addStatusListener((status) {
-      if (status == AnimationStatus.completed) {
-        controller.forward(from: 0);
-      }
-    });
+        AnimationController(vsync: this, duration: Duration(seconds: 2));
+
     super.initState();
   }
 
@@ -44,24 +44,44 @@ class _TrinityCircularProgressState extends State<TrinityCircularProgress>
   @override
   Widget build(BuildContext context) {
     controller.forward(from: 0);
+    controller.addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
+        controller.repeat();
+      }
+    });
     final dif = widget.percentage - oldPercentage;
     oldPercentage = widget.percentage;
 
     return Container(
-      padding: EdgeInsets.all(50),
+      width: widget.width,
+      height: widget.height,
+      constraints: const BoxConstraints(
+        minWidth: 36,
+        minHeight: 36,
+      ),
       child: AnimatedBuilder(
           animation: controller,
           builder: (context, child) {
             return Stack(
-              fit: StackFit.expand,
               children: [
                 CustomPaint(
-                  painter: _Circle1(
-                    color: widget.color1,
-                    percentage:
-                        (widget.percentage - dif) + (dif * controller.value),
-                  ),
-                )
+                    size: Size(widget.width, widget.height),
+                    painter: _Circle1(
+                      color: widget.color1,
+                      angle: controller.value,
+                    )),
+                CustomPaint(
+                    size: Size(widget.width, widget.height),
+                    painter: _Circle2(
+                      color: widget.color2,
+                      angle: controller.value,
+                    )),
+                CustomPaint(
+                    size: Size(widget.width, widget.height),
+                    painter: _Circle3(
+                      color: widget.color3,
+                      angle: controller.value,
+                    ))
               ],
             );
           }),
@@ -71,24 +91,79 @@ class _TrinityCircularProgressState extends State<TrinityCircularProgress>
 
 class _Circle1 extends CustomPainter {
   final Color color;
-  final double percentage;
+  final double angle;
 
-  _Circle1({@required this.percentage, @required this.color});
+  _Circle1({@required this.angle, @required this.color});
 
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
       ..style = PaintingStyle.stroke
-      ..strokeWidth = 10
+      ..strokeWidth = 3
+      ..strokeCap = StrokeCap.round
+      ..color = color;
+
+    final center = Offset(size.width * 0.5, size.height * 0.5);
+    final radius = min(size.width * 0.2, size.height * 0.2);
+
+    double arcAngle = -2 * pi * angle;
+
+    canvas.drawArc(Rect.fromCircle(center: center, radius: radius), arcAngle,
+        5.5, false, paint);
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => true;
+}
+
+class _Circle2 extends CustomPainter {
+  final Color color;
+  final double angle;
+
+  _Circle2({@required this.angle, @required this.color});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 3
+      ..strokeCap = StrokeCap.round
+      ..color = color;
+
+    final center = Offset(size.width * 0.5, size.height * 0.5);
+    final radius = min(size.width * 0.35, size.height * 0.35);
+
+    double arcAngle = 2 * pi * angle + 2;
+
+    canvas.drawArc(Rect.fromCircle(center: center, radius: radius), arcAngle,
+        5.5, false, paint);
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => true;
+}
+
+class _Circle3 extends CustomPainter {
+  final Color color;
+  final double angle;
+
+  _Circle3({@required this.angle, @required this.color});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 3
       ..strokeCap = StrokeCap.round
       ..color = color;
 
     final center = Offset(size.width * 0.5, size.height * 0.5);
     final radius = min(size.width * 0.5, size.height * 0.5);
 
-    double arcAngle = 2 * pi * (percentage / 100);
-    canvas.drawArc(Rect.fromCircle(center: center, radius: radius), -pi / 2,
-        arcAngle, false, paint);
+    double arcAngle = -2 * pi * angle + 4;
+
+    canvas.drawArc(Rect.fromCircle(center: center, radius: radius), arcAngle,
+        5.5, false, paint);
   }
 
   @override
