@@ -42,6 +42,12 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
         yield CollectionReloadedState(photo);
       }
 
+      if (event is CollectionEventRebuild) {
+        yield CollectionLoading();
+        photo = List.from(photo);
+        yield CollectionReloadedState(photo);
+      }
+
       if (event is CollectionEventAdd) {
         _page++;
         photo = [

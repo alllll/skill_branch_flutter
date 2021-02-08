@@ -8,6 +8,7 @@ import 'package:FlutterGalleryApp/bloc/photo/photo_related_bloc.dart';
 import 'package:FlutterGalleryApp/model/photo.dart';
 import 'package:FlutterGalleryApp/res/res.dart';
 import 'package:FlutterGalleryApp/widgets/claim_bottom_sheet.dart';
+import 'package:FlutterGalleryApp/widgets/trinity_circular_progress.dart';
 import 'package:FlutterGalleryApp/widgets/widgets.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
@@ -274,7 +275,9 @@ class _FullScreenImageState extends State<FullScreenImage>
             BlocBuilder<PhotoRelatedBloc, PhotoRelatedState>(
               builder: (context, state) {
                 if (state is PhotoRelatedLoadingState) {
-                  return CircularProgressIndicator();
+                  return Center(
+                    child: TrinityCircularProgress(),
+                  );
                 }
                 if (state is PhotoRelatedShowState) {
                   return GridView.builder(
@@ -358,12 +361,14 @@ class _FullScreenImageState extends State<FullScreenImage>
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   LikeButton(
-                      state.photo.likes,
-                      state.photo.likedByUser,
-                      () => BlocProvider.of<AppBloc>(context)
-                          .add(AppPhotoLikeEvent(state.photo.id)),
-                      () => BlocProvider.of<AppBloc>(context)
-                          .add(AppPhotoUnlikeEvent(state.photo.id))),
+                    state.photo.likes,
+                    state.photo.likedByUser,
+                    () => BlocProvider.of<AppBloc>(context)
+                        .add(AppPhotoLikeEvent(state.photo.id)),
+                    () => BlocProvider.of<AppBloc>(context)
+                        .add(AppPhotoUnlikeEvent(state.photo.id)),
+                    key: UniqueKey(),
+                  ),
                   SizedBox(
                     width: 10,
                   ),
@@ -403,7 +408,9 @@ class _FullScreenImageState extends State<FullScreenImage>
             BlocBuilder<PhotoRelatedBloc, PhotoRelatedState>(
               builder: (context, state) {
                 if (state is PhotoRelatedLoadingState) {
-                  return CircularProgressIndicator();
+                  return Center(
+                    child: TrinityCircularProgress(),
+                  );
                 }
                 if (state is PhotoRelatedShowState) {
                   return GridView.builder(

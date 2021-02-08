@@ -11,8 +11,9 @@ class NotificationInitial extends NotificationState {}
 
 class NotificationShowState extends NotificationState {
   String text;
-  NotificationShowState(this.text);
+  DateTime date;
+  NotificationShowState(this.text, this.date);
 
   @override
-  List<Object> get props => [text];
+  List<Object> get props => [text, date];
 }

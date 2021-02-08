@@ -1,3 +1,4 @@
+import 'package:FlutterGalleryApp/bloc/app/app_bloc.dart';
 import 'package:FlutterGalleryApp/bloc/collection/collection_bloc.dart';
 import 'package:FlutterGalleryApp/bloc/navigation/navigation_bloc.dart';
 import 'package:FlutterGalleryApp/bloc/navigation/navigation_event.dart';
@@ -155,7 +156,13 @@ class CollectionScreen extends StatelessWidget {
                 )
               ],
             ),
-            LikeButton(photo.likes, photo.likedByUser, () => {}, () => {})
+            LikeButton(photo.likes, photo.likedByUser, () {
+              BlocProvider.of<AppBloc>(context)
+                  .add(AppPhotoLikeEvent(photo.id));
+            }, () {
+              BlocProvider.of<AppBloc>(context)
+                  .add(AppPhotoUnlikeEvent(photo.id));
+            }, key: UniqueKey())
           ],
         ));
   }

@@ -14,7 +14,7 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
     NotificationEvent event,
   ) async* {
     if (event is NotificationShowEvent) {
-      yield NotificationShowState(event.text);
+      yield NotificationShowState(event.text, DateTime.now());
     }
   }
 }

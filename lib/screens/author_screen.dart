@@ -85,7 +85,7 @@ Widget _buildProfileDetailsBody(BuildContext context, User user) {
   return DefaultTabController(
     length: 3,
     child: NestedScrollView(
-      key: UniqueKey(),
+      //key: UniqueKey(),
       headerSliverBuilder: (context, value) {
         return [
           SliverAppBar(
@@ -237,6 +237,7 @@ Widget _buildListMyPhotoList(User user) {
       builder: (context, state) {
     if (state is AuthorPhotoLoadedState) {
       return LazyLoadScrollView(
+        scrollOffset: 200,
         onEndOfPage: () {
           BlocProvider.of<AuthorPhotoBloc>(context)
               .add(AuthorPhotoAddEvent(user));
@@ -247,13 +248,13 @@ Widget _buildListMyPhotoList(User user) {
                 .add(AuthorPhotoReloadEvent(user));
           },
           child: GridView.builder(
-              key: new PageStorageKey("${user.username}_author_photo_list"),
+              // key: new PageStorageKey("${user.username}_author_photo_list"),
               itemCount: state.photo.length,
               gridDelegate: new SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 3),
               itemBuilder: (context, i) {
                 return GestureDetector(
-                  key: UniqueKey(),
+                  // key: UniqueKey(),
                   onTap: () {
                     BlocProvider.of<PhotoBloc>(context)
                         .add(PhotoEventChoice(state.photo[i]));
@@ -296,6 +297,7 @@ Widget _buildListMyLikes(User user) {
       builder: (context, state) {
     if (state is AuthorLikeLoadedState) {
       return LazyLoadScrollView(
+        scrollOffset: 200,
         onEndOfPage: () {
           BlocProvider.of<AuthorLikeBloc>(context)
               .add(AuthorLikeAddEvent(user));
@@ -306,13 +308,13 @@ Widget _buildListMyLikes(User user) {
                 .add(AuthorLikeReloadEvent(user));
           },
           child: GridView.builder(
-              key: new PageStorageKey("${user.username}_author_like_list"),
+              // key: new PageStorageKey("${user.username}_author_like_list"),
               itemCount: state.photo.length,
               gridDelegate: new SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 3),
               itemBuilder: (context, i) {
                 return GestureDetector(
-                  key: UniqueKey(),
+                  //key: UniqueKey(),
                   onTap: () {
                     BlocProvider.of<PhotoBloc>(context)
                         .add(PhotoEventChoice(state.photo[i]));
@@ -356,6 +358,7 @@ Widget _buildListMyCollections(User user) {
       builder: (context, state) {
     if (state is AuthorCollectionLoadedState) {
       return LazyLoadScrollView(
+        scrollOffset: 200,
         onEndOfPage: () {
           BlocProvider.of<AuthorCollectionBloc>(context)
               .add(AuthorCollectionAddEvent(user));
@@ -366,14 +369,14 @@ Widget _buildListMyCollections(User user) {
                 .add(AuthorCollectionReloadEvent(user));
           },
           child: GridView.builder(
-              key:
-                  new PageStorageKey("${user.username}_author_collection_list"),
+              //  key:
+              //      new PageStorageKey("${user.username}_author_collection_list"),
               itemCount: state.collections.length,
               gridDelegate: new SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 3),
               itemBuilder: (context, i) {
                 return GestureDetector(
-                  key: UniqueKey(),
+                  //    key: UniqueKey(),
                   onTap: () {
                     BlocProvider.of<CollectionBloc>(context)
                         .add(CollectionChoiceEvent(state.collections[i].id));

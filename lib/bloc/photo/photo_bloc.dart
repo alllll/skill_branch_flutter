@@ -51,6 +51,10 @@ class PhotoBloc extends Bloc<PhotoEvent, PhotoState> {
         yield PhotoRebuild(currentPhoto);
       }
 
+      if (event is PhotoEventRebuild) {
+        yield PhotoRebuild(currentPhoto);
+      }
+
       if (event is PhotoEventHistoryBack) {
         /* var historyItem = history.pop();
       if (historyItem != null) {

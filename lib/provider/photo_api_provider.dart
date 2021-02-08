@@ -230,7 +230,12 @@ class PhotoApiProvider {
     await initDio();
     try {
       final Response<String> response = await dio.get("/search/photos",
-          queryParameters: {"query": text, "page": page, "per_page": perPage});
+          queryParameters: {
+            "client_id": clientId,
+            "query": text,
+            "page": page,
+            "per_page": perPage
+          });
       print(response.headers["X-Ratelimit-Remaining"]);
       if (response.statusCode == succesCode) {
         return searchResultFromJson(response.data);

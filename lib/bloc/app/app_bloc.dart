@@ -56,6 +56,9 @@ class AppBloc extends Bloc<AppEvent, AppState> {
         }
       } else {
         yield AppNotificationState("Необходимо авторизоваться!");
+        _photoListBloc.add(PhotoListRebuild());
+        _photoBloc.add(PhotoEventRebuild());
+        _collectionBloc.add(CollectionEventRebuild());
       }
     }
 
@@ -72,6 +75,9 @@ class AppBloc extends Bloc<AppEvent, AppState> {
         _profileLikeBloc.add(ProfileLikeReloadEvent(_profileBloc.user));
       } else {
         yield AppNotificationState("Необходимо авторизоваться!");
+        _photoListBloc.add(PhotoListRebuild());
+        _photoBloc.add(PhotoEventRebuild());
+        _collectionBloc.add(CollectionEventRebuild());
       }
     }
 

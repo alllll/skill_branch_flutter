@@ -1,11 +1,16 @@
 import 'package:FlutterGalleryApp/res/colors.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'app.dart';
 
 void main() {
-  runApp(MyApp(Connectivity()));
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
+      .then((_) {
+    runApp(MyApp(Connectivity()));
+  });
 }
 
 class ConnectivityOverlay {

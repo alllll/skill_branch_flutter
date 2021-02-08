@@ -23,4 +23,6 @@ class PhotoEventRelatedChoice extends PhotoEvent {
   PhotoEventRelatedChoice(this.id);
 }
 
+class PhotoEventRebuild extends PhotoEvent {}
+
 class PhotoEventHistoryBack extends PhotoEvent {}

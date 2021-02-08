@@ -11,3 +11,5 @@ class CollectionChoiceEvent extends CollectionEvent {
 class CollectionEventReload extends CollectionEvent {}
 
 class CollectionEventAdd extends CollectionEvent {}
+
+class CollectionEventRebuild extends CollectionEvent {}

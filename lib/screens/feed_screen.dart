@@ -7,6 +7,7 @@ import 'package:FlutterGalleryApp/bloc/photo/photo_list_bloc.dart';
 import 'package:FlutterGalleryApp/model/photo.dart';
 import 'package:FlutterGalleryApp/res/res.dart';
 import 'package:FlutterGalleryApp/screens/photo_screen.dart';
+import 'package:FlutterGalleryApp/widgets/trinity_circular_progress.dart';
 import 'package:FlutterGalleryApp/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -93,9 +94,16 @@ _listPhoto(context, List<Photo> photo, ScrollController controller) {
         child: ListView.builder(
             controller: controller,
             key: new PageStorageKey("feed_list"),
-            itemCount: photo.length,
+            itemCount: photo.length + 1,
             itemBuilder: (context, i) {
-              return _buildItem(context, photo[i], i);
+              if (i < photo.length)
+                return _buildItem(context, photo[i], i);
+              else
+                return Padding(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 200, horizontal: 50),
+                  child: Center(child: TrinityCircularProgress()),
+                );
             }),
       ),
     ),

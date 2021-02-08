@@ -36,6 +36,7 @@ class ProfileLikeBloc extends Bloc<ProfileLikeEvent, ProfileLikeState> {
           ...await unsplashRepository.fetchUserLikes(
               event.user.username, _page, _perPage)
         ];
+
         yield ProfileLikeLoadedState(photo);
       }
 
