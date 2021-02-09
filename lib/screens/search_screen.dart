@@ -115,9 +115,7 @@ class SearchGrid extends StatelessWidget {
               return GestureDetector(
                   onTap: () => BlocProvider.of<PhotoBloc>(context)
                       .add(PhotoEventChoice(photo[index])),
-                  child: Hero(
-                      tag: photo[index].id,
-                      child: ImageCard(imageUrl: photo[index].urls.small)));
+                  child: ImageCard(imageUrl: photo[index].urls.small));
             },
             staggeredTileBuilder: (index) => StaggeredTile.count(
                 (index % 7 == 0) ? 2 : 1, (index % 7 == 0) ? 2 : 1),
