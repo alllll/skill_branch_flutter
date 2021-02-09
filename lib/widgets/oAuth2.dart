@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:FlutterGalleryApp/widgets/trinity_circular_progress.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -40,7 +41,7 @@ class _OAuth2State extends State<OAuth2> {
         future: _cookieManager.clearCookies(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
-            return Center(child: CircularProgressIndicator());
+            return Center(child: TrinityCircularProgress());
           } else {
             return _createWebView();
           }

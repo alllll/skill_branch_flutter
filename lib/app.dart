@@ -23,6 +23,7 @@ import 'package:FlutterGalleryApp/screens/feed_screen.dart';
 import 'package:FlutterGalleryApp/screens/home.dart';
 import 'package:FlutterGalleryApp/screens/home_.dart';
 import 'package:FlutterGalleryApp/screens/photo_screen.dart';
+import 'package:FlutterGalleryApp/widgets/trinity_circular_progress.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -183,7 +184,7 @@ class _MyAppState extends State<MyApp> {
                 return NoInternetScreen();
               }
               if (state is ConnectivityInitialState) {
-                return CircularProgressIndicator();
+                return TrinityCircularProgress();
               }
               widget._connectivity.checkConnectivity();
             },

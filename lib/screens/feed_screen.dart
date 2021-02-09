@@ -38,13 +38,13 @@ class _FeedState extends State<Feed> {
         builder: (context, state) {
       if (state is PhotoListInitial) {
         return Center(
-          child: CircularProgressIndicator(),
+          child: TrinityCircularProgress(),
         );
       }
       if (state is PhotoListLoaded) {
         return _listPhoto(context, state.photo, _controller);
       }
-      return Center(child: CircularProgressIndicator());
+      return Center(child: TrinityCircularProgress());
     });
   }
 }

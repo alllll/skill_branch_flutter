@@ -61,7 +61,7 @@ class _SearchScreenState extends State<SearchScreen> {
                     return Container();
                   }
                   if (state is SearchLoadingState) {
-                    return Center(child: CircularProgressIndicator());
+                    return Center(child: TrinityCircularProgress());
                   }
                   if (state is SearchShowResultState) {
                     return SearchGrid(state.photo);

@@ -59,7 +59,7 @@ class _FullScreenImageState extends State<FullScreenImage>
         }));
     /*
     return BlocBuilder<PhotoBloc, PhotoState>(builder: (context, state) {
-      // if (state is PhotoLoading) return CircularProgressIndicator();
+      // if (state is PhotoLoading) return TrinityCircularProgress();
       if (state is PhotoLoading) return Container();
       if (state is PhotoLoaded || state is PhotoRebuild) {
         AnimationController _controller = AnimationController(
@@ -176,7 +176,7 @@ class _FullScreenImageState extends State<FullScreenImage>
                                 ),
                                 child: CachedNetworkImage(
                                   placeholder: (context, url) =>
-                                      CircularProgressIndicator(),
+                                      TrinityCircularProgress(),
                                   fit: BoxFit.cover,
                                   imageUrl: (state as PhotoLoaded)
                                       .relatedPhoto[i]

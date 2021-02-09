@@ -7,6 +7,7 @@ import 'package:FlutterGalleryApp/model/photo.dart';
 import 'package:FlutterGalleryApp/res/res.dart';
 import 'package:FlutterGalleryApp/screens/photo_screen.dart';
 import 'package:FlutterGalleryApp/widgets/claim_bottom_sheet.dart';
+import 'package:FlutterGalleryApp/widgets/trinity_circular_progress.dart';
 import 'package:FlutterGalleryApp/widgets/widgets.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -30,7 +31,7 @@ class CollectionScreen extends StatelessWidget {
               builder: (context, state) {
             if (state is CollectionLoading) {
               return Center(
-                child: CircularProgressIndicator(),
+                child: TrinityCircularProgress(),
               );
             }
 
@@ -41,7 +42,7 @@ class CollectionScreen extends StatelessWidget {
             if (state is CollectionReloadedState) {
               return _listPhoto(context, state.photo);
             }
-            return Center(child: CircularProgressIndicator());
+            return Center(child: TrinityCircularProgress());
           }),
         ));
   }
@@ -50,20 +51,7 @@ class CollectionScreen extends StatelessWidget {
     return AppBar(
       elevation: 0,
       backgroundColor: AppColors.white,
-      actions: [
-        IconButton(
-            icon: Icon(Icons.more_vert, color: AppColors.grayChateau),
-            onPressed: () {
-              showModalBottomSheet(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  context: context,
-                  builder: (context) {
-                    return ClaimBottomSheet();
-                  });
-            }),
-      ],
+      actions: [],
       leading: IconButton(
           icon: Icon(CupertinoIcons.back, color: AppColors.grayChateau),
           onPressed: () => Navigator.pop(context)),
