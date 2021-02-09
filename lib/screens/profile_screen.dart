@@ -14,6 +14,7 @@ import 'package:FlutterGalleryApp/screens/collection_screen.dart';
 import 'package:FlutterGalleryApp/screens/photo_screen.dart';
 import 'package:FlutterGalleryApp/widgets/oAuth2.dart';
 import 'package:FlutterGalleryApp/widgets/read_more_text.dart';
+import 'package:FlutterGalleryApp/widgets/trinity_circular_progress.dart';
 import 'package:FlutterGalleryApp/widgets/user_avatar.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -51,7 +52,7 @@ class _ProfileState extends State<Profile> {
       if (state is ProfileAuthenticatedState) {
         return ProfileDetails(state.user);
       }
-      return CircularProgressIndicator();
+      return TrinityCircularProgress();
     });
   }
 }
@@ -295,8 +296,8 @@ Widget _buildListMyPhotoList(User user) {
         ),
       );
     }
-    if (state is MyPhotoLoadingEvent) return CircularProgressIndicator();
-    if (state is MyPhotoInitialState) return CircularProgressIndicator();
+    if (state is MyPhotoLoadingEvent) return TrinityCircularProgress();
+    if (state is MyPhotoInitialState) return TrinityCircularProgress();
   });
 }
 
@@ -353,8 +354,8 @@ Widget _buildListMyLikes(User user) {
         ),
       );
     }
-    if (state is ProfileLikeLoadingEvent) return CircularProgressIndicator();
-    if (state is ProfilelikeInitial) return CircularProgressIndicator();
+    if (state is ProfileLikeLoadingEvent) return TrinityCircularProgress();
+    if (state is ProfilelikeInitial) return TrinityCircularProgress();
   });
 }
 
@@ -421,8 +422,8 @@ Widget _buildListMyCollections(User user) {
       );
     }
     if (state is ProfileCollectionLoadingEvent)
-      return CircularProgressIndicator();
-    if (state is ProfileCollectionInitial) return CircularProgressIndicator();
+      return TrinityCircularProgress();
+    if (state is ProfileCollectionInitial) return TrinityCircularProgress();
   });
 }
 
